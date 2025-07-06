@@ -2,11 +2,14 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function Register() {
-  const [username, setUsername] = useState('')
+  const [loginType, setLoginType] = useState('id') // 預設為身分證
+  const [loginValue, setLoginValue] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [realName, setRealName] = useState('')
   const [error, setError] = useState(null)
   const navigate = useNavigate()
+
 
   const handleRegister = async (e) => {
     e.preventDefault()
@@ -40,18 +43,45 @@ export default function Register() {
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
       <h1 className="text-2xl font-bold mb-4">註冊帳號</h1>
       <form onSubmit={handleRegister} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium">帳號</label>
+        {/*輸入帳號 身分證*/}
+        <div className="w-full justify-start ">
+        <label className="block text-sm font-medium" >*Login ID(帳號):</label>        
+        {/* 單選選項 */}
+      <div className="flex items-center space-x-4">
+        <label className="flex items-center space-x-2">
           <input
-            type="text"
-            className="w-full border px-3 py-2 rounded"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
+            type="radio"
+            name="loginType"
+            value="id"
+            checked={loginType === 'id'}
+            onChange={(e) => setLoginType(e.target.value)}
           />
+          <span>身分證字號</span>
+        </label>
+
+        <label className="flex items-center space-x-2">
+          <input
+            type="radio"
+            name="loginType"
+            value="passport"
+            checked={loginType === 'passport'}
+            onChange={(e) => setLoginType(e.target.value)}
+          />
+          <span>護照或居留證號碼</span>
+        </label>
+      </div>
+      <input
+        type="text"
+        className="w-full border px-3 py-2 rounded"
+        placeholder={loginType === 'id' ? '請輸入身分證字號' : '請輸入護照或居留證號碼'}
+        value={loginValue}
+        onChange={(e) => setLoginValue(e.target.value)}
+        required
+      />
         </div>
+         {/*輸入密碼*/}
         <div>
-          <label className="block text-sm font-medium">密碼</label>
+          <label className="block text-sm font-medium">*Password(密碼):</label>
           <input
             type="password"
             className="w-full border px-3 py-2 rounded"
@@ -60,8 +90,9 @@ export default function Register() {
             required
           />
         </div>
+         {/*密碼確認*/}
         <div>
-          <label className="block text-sm font-medium">確認密碼</label>
+          <label className="block text-sm font-medium">*Confirm password(確認密碼):</label>
           <input
             type="password"
             className="w-full border px-3 py-2 rounded"
@@ -70,6 +101,17 @@ export default function Register() {
             required
           />
         </div>
+          {/*輸入姓名
+          <div>
+          <label className="block text-sm font-medium">*Name(會員姓名):</label>
+          <input
+            type="text"
+            className="w-full border px-3 py-2 rounded"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>*/}
         {error && <p className="text-red-600 text-sm">{error}</p>}
         <button
           type="submit"
