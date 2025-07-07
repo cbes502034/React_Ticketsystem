@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function Register() {
+  {/*登入帳號*/}
   const [loginType, setLoginType] = useState('id') // 預設為身分證
   const [loginValue, setLoginValue] = useState('')
+  {/*密碼*/}
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [realName, setRealName] = useState('')
