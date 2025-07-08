@@ -12,8 +12,8 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="p-6 bg-brand-bg min-h-screen text-brand-text">
-      <h1 className="text-3xl font-bold mb-6 text-brand-text">🔥 熱門演唱會</h1>
+    <div className="pt-20 p-6 bg-brand-bg min-h-screen text-brand-text">
+      <h1 className="text-3xl font-bold mb-6 text-brand-text"> 熱門演唱會</h1>
 
       {concerts.length === 0 ? (
         <p className="text-brand-text/70">目前沒有熱門演唱會資料</p>
