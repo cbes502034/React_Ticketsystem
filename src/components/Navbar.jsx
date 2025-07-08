@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import image from '../assets/image'
 
 
@@ -7,6 +7,8 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
+
 
   useEffect(() => {
     fetch('/check_login', { credentials: 'include' })
@@ -15,18 +17,22 @@ export default function Navbar() {
       .catch(() => setIsLoggedIn(false))
   }, [])
 
+  useEffect(() => {
+    setIsMenuOpen(false) 
+  }, [location])
+
   const handleCartClick = () => {
     if (isLoggedIn) {
       navigate('/shopping-cart')
     } else {
-      navigate('/auth/login')
+      navigate('/auth')
     }
-  }
+  }  
 
   return (
-    <nav className="bg-[#D7C4BB] px-6 py-3 flex justify-between items-center shadow">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#D7C4BB] px-6 py-3 flex justify-between items-center shadow">
       {/* 左側 Logo 與標題 */}
-      <Link to="/" className="text-xl font-bold text-[#734338]">🎵 演唱會系統</Link>
+      <Link to="/" className="text-xl font-bold text-[#734338]">演唱會系統</Link>
 
       {/* 中間連結（桌機顯示） */}
       <div className="hidden md:flex gap-6 text-[#734338] font-medium">
@@ -36,7 +42,7 @@ export default function Navbar() {
 
       {/* 右側圖示按鈕 */}
       <div className="flex items-center gap-4">
-        <Link to="/auth">
+        <Link to={isLoggedIn ? "/profile" : "/auth"}>
           <img src={image.account} alt="Account" className="w-6 h-6 hover:opacity-80" />
         </Link>
         <button onClick={handleCartClick}>
@@ -51,11 +57,16 @@ export default function Navbar() {
 
       {/* 手機選單 */}
       {isMenuOpen && (
-        <div className="absolute top-full right-4 mt-2 w-40 bg-white rounded shadow-md z-50">
-          <Link to="/concerts" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">演唱會資訊</Link>
-          <Link to="/tickets" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">購票資訊</Link>
+        <div className="fixed inset-0 top-[50px] z-50 bg-white p-6 md:hidden overflow-y-auto">
+          <div className="space-y-4">
+
+            <Link to="/concerts" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">演唱會資訊</Link>
+            <Link to="/tickets" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">購票資訊</Link>
+
+          </div>
         </div>
       )}
+
     </nav>
   )
 }
