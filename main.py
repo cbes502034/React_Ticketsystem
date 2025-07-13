@@ -4,15 +4,12 @@ from typing import Annotated
 from fastapi.responses import JSONResponse,PlainTextResponse,HTMLResponse,FileResponse,RedirectResponse 
 from fastapi.staticfiles import StaticFiles
 import pymysql
-#import requests
-#from bs4 import BeautifulSoup as bs
-from bs4 import NavigableString
 import os
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 
 app = FastAPI()
 
-
+'''
 USER = "root"
 PASSWORD = "QqAboztnLkfYyJgpisWGHYbQiUkZYRxE"
 HOST = "centerbeam.proxy.rlwy.net"
@@ -20,14 +17,13 @@ PORT = 21732
 DATABASE = "main"
 KEY = "ticket_key"
 '''
+
 load_dotenv()
 USER = os.getenv("MYSQLUSER")
 PASSWORD = os.getenv("MYSQLPASSWORD")
 HOST = os.getenv("MYSQLHOST")
 PORT = int(os.getenv("MYSQLPORT"))
 DATABASE = os.getenv("MYSQLDATABASE")
-'''
-
 
 app.add_middleware(SessionMiddleware,secret_key=KEY)
 
@@ -257,10 +253,5 @@ async def get_informations(request:Request):
                              "ticket"],informations))
     
     return JSONResponse(informations)
-
-
-    
-    
-    
 #=======================================================================
 app.mount("/",StaticFiles(directory="演唱會訂票",html=True))
