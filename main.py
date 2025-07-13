@@ -24,6 +24,7 @@ PASSWORD = os.getenv("MYSQLPASSWORD")
 HOST = os.getenv("MYSQLHOST")
 PORT = int(os.getenv("MYSQLPORT"))
 DATABASE = os.getenv("MYSQLDATABASE")
+KEY = "ticket_key"
 
 app.add_middleware(SessionMiddleware,secret_key=KEY)
 
