@@ -254,4 +254,4 @@ async def get_informations(request:Request):
     
     return JSONResponse(informations)
 #=======================================================================
-app.mount("/",StaticFiles(directory="ticketsystem",html=True))
+app.mount("/",StaticFiles(directory="Frontend",html=True))
