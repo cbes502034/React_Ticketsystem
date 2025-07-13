@@ -1,7 +1,0 @@
-[
-    { "key": "login", "label": "會員登入", "path": "/auth/login" },
-    { "key": "register", "label": "加入會員", "path": "/register" },
-    { "key": "forgot", "label": "忘記密碼", "path": "/auth/forgot-password" },
-    { "key": "update", "label": "會員資料異動申請", "path": "/auth/update-info" }
-]
-  
