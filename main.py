@@ -83,7 +83,7 @@ async def account_created(
                 address
                 )
         )
-    return RedirectResponse(url="/account_created.html", status_code=303)
+    return RedirectResponse(url="/Register.jsx", status_code=303)
 
 @app.post("/check_account_exists")
 async def check_account_exists(request: Request):
@@ -329,4 +329,4 @@ async def hot_event_informations(request:Request):
     return JSONResponse({"intro":intro,"note":note,"buy-note":buy_note,"get-note":get_note,"refund-note":refund_note})
     
 #=======================================================================
-app.mount("/",StaticFiles(directory="concert_frontend",html=True))
+app.mount("/",StaticFiles(directory="Frontend",html=True))
