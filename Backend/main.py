@@ -59,11 +59,6 @@ def session_check(username):
     else:
         return JSONResponse({"login_status": False, "message":"尚未登入"})
 
-@app.get("/{full_path:path}")
-async def serve_react_app(full_path: str):
-    return FileResponse("dist/index.html")
-
-
 @app.post("/account_created")
 async def account_created(
     username: str = Form(),
