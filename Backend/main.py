@@ -63,6 +63,7 @@ def session_check(username):
 async def serve_react_app(full_path: str):
     return FileResponse("dist/index.html")
 
+
 @app.post("/account_created")
 async def account_created(
     username: str = Form(),
