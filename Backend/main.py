@@ -11,10 +11,10 @@ app = FastAPI()
 
 '''
 USER = "root"
-PASSWORD = "QqAboztnLkfYyJgpisWGHYbQiUkZYRxE"
-HOST = "centerbeam.proxy.rlwy.net"
-PORT = 21732
-DATABASE = "main"
+PASSWORD = "DdAmmOtQGtxHmxhCiTZTxYmSgrnLlBSk"
+HOST = "gondola.proxy.rlwy.net"
+PORT = 51385
+DATABASE = "GJun"
 KEY = "ticket_key"
 '''
 
@@ -256,4 +256,3 @@ async def get_informations(request:Request):
     return JSONResponse(informations)
 #=======================================================================
 app.mount("/", StaticFiles(directory="Backend/dist", html=True))
-
