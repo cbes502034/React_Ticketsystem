@@ -116,7 +116,7 @@ async def check_account_exists(request: Request):
 async def get_ticket_informations(
                             request: Request,
                                     event: str,
-                                    type_: str,
+                                    type: str,
                                     zone: str,
                                     quantity : str
                                     ):
@@ -124,7 +124,7 @@ async def get_ticket_informations(
     
     return JSONResponse({"username":username,
                          "event":event,
-                         "type_":type_,
+                         "type":type,
                          "zone":zone,
                          "quantity":quantity,
                          "link":"ticket_success.html"})
@@ -133,7 +133,7 @@ async def get_ticket_informations(
 async def load_ticket(
                         request: Request,
                         event: str,
-                        type_: str,
+                        type: str,
                         zone: str,
                         quantity : str
                         ):
@@ -141,9 +141,9 @@ async def load_ticket(
     
     SQL(
         db="project",
-        instruction = """INSERT INTO ticket(username,event,type_,zone,quantity)
+        instruction = """INSERT INTO ticket(username,event,type,zone,quantity)
                          VALUES(%s,%s,%s,%s,%s)""",
-        SET=(username,event,type_,zone,quantity)
+        SET=(username,event,type,zone,quantity)
         )
     
 @app.get("/ticket_success")
