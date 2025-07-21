@@ -90,7 +90,7 @@ async def account_created(
                 address
                 )
         )
-    return RedirectResponse(url="/account_created.html", status_code=303)
+    return RedirectResponse(url="/pages/Register", status_code=303)
 
 @app.post("/check_account_exists")
 async def check_account_exists(request: Request):
