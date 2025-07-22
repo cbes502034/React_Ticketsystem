@@ -59,4 +59,6 @@ async def Ticket(request : Request):
     response = await TicketModule.GetTicketData(tools=tools, request=request)
     return JSONResponse(response)
 
-app.mount("/", StaticFiles(directory="Frontend", html=True))
+#=======================================================================
+app.mount("/", StaticFiles(directory="Backend/dist", html=True))
+
