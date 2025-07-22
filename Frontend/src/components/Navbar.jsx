@@ -42,6 +42,26 @@ export default function Navbar() {
 
       {/* 右側圖示按鈕 */}
       <div className="flex items-center gap-4">
+        {/* 搜尋欄 */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              const keyword = e.target.keyword.value.trim()
+              if (keyword) navigate(`/search?keyword=${encodeURIComponent(keyword)}`)
+            }}
+            className="hidden md:flex items-center gap-2"
+          >
+            <input
+              type="text"
+              name="keyword"
+              placeholder="搜尋演唱會"
+              className="px-2 py-1 border rounded text-sm"
+            />
+            <button type="submit" className="text-sm bg-[#734338] text-white px-2 py-1 rounded hover:bg-[#947A6D]">
+              <img src={image.search} alt="search" className="w-4 h-4" />
+            </button>
+          </form>
+
         <Link to={isLoggedIn ? "/profile" : "/auth"}>
           <img src={image.account} alt="Account" className="w-6 h-6 hover:opacity-80" />
         </Link>
