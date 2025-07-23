@@ -5,6 +5,9 @@ from fastapi.staticfiles import StaticFiles
 from .ProjectTools.Tools import Tools
 from .Modules import RegisterModule,LoginModule,IndexModule,LogoutModule,ProfileModule,TicketModule
 
+import os
+from Modules import RegisterModule,LoginModule,IndexModule,LogoutModule,ProfileModule,TicketModule
+
 app = FastAPI()
 KEY = "ticket_key"
 app.add_middleware(SessionMiddleware,secret_key=KEY)
@@ -29,9 +32,14 @@ tools = Tools(
                 DATABASE = os.getenv("MYSQLPORT")
               )
 #'''
-@app.post("/users")
+@app.post("/auth/verify/init")
+async def ShowQRcode(request: Request):
+    response = await RegisterModule.ShowQRcode(tools=tools,request=request)
+    return JSONResponse(response)
+
+@app.post("/auth/verify/confirm")
 async def Register(request: Request):
-    response = await RegisterModule.CreateUser(tools=tools,request=request)
+    response = await RegisterModule.CheckANDRegister(tools=tools,request=request)
     return JSONResponse(response)
 
 @app.post("/auth/login")
@@ -59,6 +67,4 @@ async def Ticket(request : Request):
     response = await TicketModule.GetTicketData(tools=tools, request=request)
     return JSONResponse(response)
 
-#=======================================================================
 app.mount("/", StaticFiles(directory="Backend/dist", html=True))
-
