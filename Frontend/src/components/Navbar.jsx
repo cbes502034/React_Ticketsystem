@@ -6,6 +6,7 @@ import image from '../assets/image'
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -15,13 +16,24 @@ export default function Navbar() {
       .then(res => res.json())
       .then(data => setIsLoggedIn(data.logged_in || false))
       .catch(() => setIsLoggedIn(false))
-  }, [])
+  }, [])//待改
+
+  useEffect(() => {
+  const shouldLockScroll = isSearchOpen || isMenuOpen;
+  document.body.style.overflow = shouldLockScroll ? 'hidden' : 'auto';
+
+  // 在組件卸載時還原 scroll 狀態
+  return () => {
+    document.body.style.overflow = 'auto';
+  };
+  }, [isSearchOpen, isMenuOpen]);
 
   useEffect(() => {
     setIsMenuOpen(false) 
   }, [location])
 
   const handleCartClick = () => {
+    setIsSearchOpen(false)
     if (isLoggedIn) {
       navigate('/shopping-cart')
     } else {
@@ -42,15 +54,85 @@ export default function Navbar() {
 
       {/* 右側圖示按鈕 */}
       <div className="flex items-center gap-4">
+
+        {/* 搜尋欄 */}
+        {location.pathname === '/' && (
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              const keyword = e.target.keyword.value.trim()
+              if (keyword) navigate(`/search?keyword=${encodeURIComponent(keyword)}`)
+            }}
+            className="hidden md:flex items-center gap-2"
+          >
+
+            <input
+              type="text"
+              name="keyword"
+              placeholder="搜尋演唱會"
+              className="px-2 py-1 border rounded text-sm"
+            />
+            <button type="submit" className="text-sm bg-[#734338] text-white px-2 py-1 rounded hover:bg-[#947A6D]">
+              <img src={image.search} alt="search" className="w-4 h-4" />
+            </button>
+          </form>
+        )}
+
         <Link to={isLoggedIn ? "/profile" : "/auth"}>
           <img src={image.account} alt="Account" className="w-6 h-6 hover:opacity-80" />
         </Link>
         <button onClick={handleCartClick}>
           <img src={image.cart} alt="Cart" className="w-6 h-6 hover:opacity-80" />
-        </button>
+        </button>   
+        {/* 手機搜尋欄 */}
+        {location.pathname === '/' && (
+
+          <button className="md:hidden" onClick={() => {setIsSearchOpen(!isSearchOpen); setIsMenuOpen(false);}}>
+            <img src={image.search} alt="search" className="w-5 h-5" />
+          </button>
+        )}
+            {isSearchOpen && (
+              <div
+                className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center"
+                onClick={() => setIsSearchOpen(false)} 
+              >
+                <form
+                  onClick={(e) => e.stopPropagation()} 
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    const keyword = e.target.keyword.value.trim()
+                    if (keyword) {
+                      navigate(`/search?keyword=${encodeURIComponent(keyword)}`)
+                      setIsMenuOpen(false)
+                    }
+                  }}
+                  className="md:hidden bg-white p-6 rounded shadow-md w-11/12 max-w-md"
+                >
+                  <h2 className="text-lg font-semibold mb-2 text-center">搜尋演唱會</h2>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      name="keyword"
+                      placeholder="輸入關鍵字"
+                      className="flex-1 px-3 py-2 border rounded"
+                    />
+                    <button
+                      type="submit"
+                      className="bg-[#734338] text-white px-4 py-2 rounded hover:bg-[#947A6D]"
+                    >
+                      搜尋
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
 
         {/* 手機收合選單按鈕 */}
-        <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        <button className="md:hidden" 
+                onClick={() => {
+                  setIsMenuOpen(!isMenuOpen) 
+                  setIsSearchOpen(false)}}>
           <img src={image.right} alt="Menu" className="w-6 h-6" />
         </button>
       </div>

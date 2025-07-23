@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import concertsData from '../data/concerts.json'
+
 
 export default function Home() {
   const [concerts, setConcerts] = useState([])
 
   useEffect(() => {
-    fetch('/get_hot_concerts')
-      .then(res => res.json())
-      .then(data => setConcerts(data))
-      .catch(err => console.error('載入熱門演唱會失敗:', err))
+    setConcerts(concertsData)
   }, [])
 
   return (
