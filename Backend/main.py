@@ -5,9 +5,6 @@ from fastapi.staticfiles import StaticFiles
 from .ProjectTools.Tools import Tools
 from .Modules import RegisterModule,LoginModule,IndexModule,LogoutModule,ProfileModule,TicketModule
 
-import os
-from Modules import RegisterModule,LoginModule,IndexModule,LogoutModule,ProfileModule,TicketModule
-
 app = FastAPI()
 KEY = "ticket_key"
 app.add_middleware(SessionMiddleware,secret_key=KEY)
