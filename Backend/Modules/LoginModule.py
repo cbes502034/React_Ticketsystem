@@ -5,18 +5,14 @@ async def Check(tools,request):
             data = response["data"]
             login_id = data["login_id"]
             password = data["password"]
-            if not tools.Sql(
-                         instruction="""SELECT * FROM register 
-                                        WHERE login_id=%s AND password=%s""",
-                         SELECT=True,
-                         SET=(
-                                login_id,
-                                password
-                                )
-                         ):
+            if not tools.Sql(instruction="""SELECT * FROM register 
+                                            WHERE login_id=%s AND password=%s""",
+                             SELECT=True,
+                             SET=(login_id,
+                                  password)):
                 return {"status":False,
-                        "notify":"登入失敗 ! \n請檢查 帳號、密碼、信箱 是否正確 !"}
-            
+                        "notify":"登入失敗 ! \n請檢查 帳號、密碼 是否正確 !"}
+
             request.session["User"] = login_id
             return {"status":True,
                     "notify":"登入成功 !",
