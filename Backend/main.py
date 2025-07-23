@@ -35,12 +35,13 @@ tools = Tools(
 @app.post("/auth/verify/init")
 async def ShowQRcode(request: Request):
     response = await RegisterModule.ShowQRcode(tools=tools,request=request)
-    #response = await RegisterModule.CreateUser(tools=tools,request=request)
     return JSONResponse(response)
+
 @app.post("/auth/verify/confirm")
 async def Register(request: Request):
     response = await RegisterModule.CheckANDRegister(tools=tools,request=request)
     return JSONResponse(response)
+
 @app.post("/auth/login")
 async def Login(request:Request):
     response = await LoginModule.Check(tools=tools,request=request)
