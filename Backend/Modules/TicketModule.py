@@ -13,7 +13,10 @@ async def GetTicketData(tools,request):
                                  VALUES(%s,%s,%s,%s,%s)""",
                 SET=(login_id,event,type_,zone,quantity)
                 )
-            return {"status":True,"notify":"票券資料寫入成功 !"}
+            return {"status":True,
+                    "notify":"票券資料寫入成功 !"}
+        
         except Exception as e:
-            return {"status":False,"notify":f"票券資料寫入失敗 ! 錯誤訊息 : {type(e)} | {e}"}
+            return {"status":False,
+                    "notify":f"票券資料寫入失敗 ! 錯誤訊息 : {type(e)} {e}"}
     return response
