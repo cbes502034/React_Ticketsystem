@@ -29,6 +29,10 @@ def GetProfileData(tools,request):
     
         profileData = dict(zip(columns+["ticket"],profileData))
         
-        return {"status":True,"notify":"會員資料提取完成 !","profileData":profileData}
+        return {"status":True,
+                "notify":"會員資料提取完成 !",
+                "profileData":profileData}
+    
     except Exception as e:
-        return {"status":True,"notify":f"會員資料提取失敗 ! 錯誤訊息 : {type(e)} | {e}"}
+        return {"status":True,
+                "notify":f"會員資料提取失敗 ! 錯誤訊息 : {type(e)} | {e}"}
