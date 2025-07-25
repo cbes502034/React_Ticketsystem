@@ -2,7 +2,7 @@ def GetProfileData(tools,request):
     def TupleToList(data):
         return list(map(lambda _:list(_),data))
     try:
-        login_id = request.session["User"]
+        login_id = request.session["UserID"]
         columns = ["login_id",
                    "name",
                    "gender",
