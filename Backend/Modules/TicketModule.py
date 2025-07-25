@@ -7,7 +7,7 @@ async def GetTicketData(tools,request):
             type_ = data["type"]
             zone = data["zone"]
             quantity = data["quantity"]
-            login_id = request.session["User"]
+            login_id = request.session["UserID"]
             tools.Sql(
                 instruction = """INSERT INTO ticket(login_id,event,type,zone,quantity)
                                  VALUES(%s,%s,%s,%s,%s)""",
