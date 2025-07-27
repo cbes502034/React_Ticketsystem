@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 
 export default function Login() {
-  const [username, setUsername] = useState('')
+ const [login_id, setLoginId] = useState('')
   const [password, setPassword] = useState('')
   //const [captcha, setCaptcha] = useState('')
   const navigate = useNavigate()
@@ -11,16 +11,17 @@ export default function Login() {
  const handleSubmit = async (e) => {
   e.preventDefault()
 
-  const formData = new URLSearchParams()
-  formData.append("username", username)
-  formData.append("password", password)
+  const body = {
+      login_id,
+      password,
+    }
 
   const res = await fetch("/auth/login", {
     method: "POST",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/json"
     },
-    body: formData,
+    body: JSON.stringify(body),
     credentials: "include" 
   })
 
@@ -44,7 +45,7 @@ export default function Login() {
             placeholder="身分證字號、護照或台灣通行證號碼"
             className="flex-1 border px-3 py-2 rounded border-gray-400"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => setLoginId(e.target.value)}
             required
           />
         </div>
