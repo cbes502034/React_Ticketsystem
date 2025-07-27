@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 
 export default function Login() {
   const [username, setUsername] = useState('')
@@ -19,7 +21,7 @@ export default function Login() {
       "Content-Type": "application/x-www-form-urlencoded"
     },
     body: formData,
-    credentials: "include" // 🔥 讓 cookie (session) 正常運作
+    credentials: "include" 
   })
 
   const data = await res.json()
