@@ -3,13 +3,33 @@ import { useState } from 'react'
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [captcha, setCaptcha] = useState('')
+  //const [captcha, setCaptcha] = useState('')
+  const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // TODO: 呼叫 /login API
+ const handleSubmit = async (e) => {
+  e.preventDefault()
+
+  const formData = new URLSearchParams()
+  formData.append("username", username)
+  formData.append("password", password)
+
+  const res = await fetch("/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: formData,
+    credentials: "include" // 🔥 讓 cookie (session) 正常運作
+  })
+
+  const data = await res.json()
+  if (data.status) {
+    alert(data.notify || "登入成功！")
+    navigate('/Home')   
+  } else {
+    alert(data.notify || "登入失敗")
   }
-
+}
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow border border-gray-300">
       <h2 className="text-xl font-bold text-center mb-6">請先登入會員方可購票及使用會員服務</h2>
@@ -37,24 +57,6 @@ export default function Login() {
             required
           />
         </div>
-
-        {/* <div className="flex items-center">
-          <label className="w-20">驗證碼：</label>
-          <input
-            type="text"
-            className="w-28 border px-3 py-2 rounded border-gray-400"
-            value={captcha}
-            onChange={(e) => setCaptcha(e.target.value)}
-          />
-          <img
-            src="/captcha.jpg"
-            alt="驗證碼"
-            className="ml-3 h-10 w-24 object-contain border"
-          />
-          <button type="button" className="ml-2 text-gray-500 hover:text-black">
-            🔄
-          </button>
-        </div>*/}
 
         <div className="flex justify-between items-center text-sm text-gray-600 mt-2">
           <a href="#" className="flex items-center gap-1 hover:text-gray-900">
