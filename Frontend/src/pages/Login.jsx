@@ -44,7 +44,7 @@ export default function Login() {
             type="text"
             placeholder="身分證字號、護照或台灣通行證號碼"
             className="flex-1 border px-3 py-2 rounded border-gray-400"
-            value={username}
+            value={login_id}
             onChange={(e) => setLoginId(e.target.value)}
             required
           />
