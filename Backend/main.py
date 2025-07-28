@@ -2,8 +2,8 @@ from fastapi import FastAPI,Request
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from .ProjectTools.Tools import Tools
-from .Modules import RegisterModule,LoginModule,IndexModule,LogoutModule,ProfileModule,TicketModule
+from ProjectTools.Tools import Tools
+from Modules import RegisterModule,LoginModule,IndexModule,LogoutModule,ProfileModule,TicketModule
 
 app = FastAPI()
 KEY = "ticket_key"
@@ -62,6 +62,11 @@ async def User(request : Request):
 @app.post("/ticket")
 async def Ticket(request : Request):
     response = await TicketModule.GetTicketData(tools=tools, request=request)
+    return JSONResponse(response)
+
+@app.get("/ticket/availability")
+async def GetTicketAvailability(request : Request):
+    response = await TicketModule.CheckTicketPurchased(tools=tools, request=request)
     return JSONResponse(response)
 
 app.mount("/", StaticFiles(directory="Backend/dist", html=True))
