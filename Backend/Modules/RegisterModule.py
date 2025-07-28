@@ -1,4 +1,4 @@
-from ProjectTools import TOTP
+from ..ProjectTools import TOTP
 async def ShowQRcode(tools,request):
     response = await tools.GetRequestData(request=request)
     if response["status"]:

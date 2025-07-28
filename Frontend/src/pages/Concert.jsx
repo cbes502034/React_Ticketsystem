@@ -26,7 +26,7 @@ export default function Concert() {
   }
 
   const handleSelectTicket = (ticketType) => {
-    // 你可以改成 navigate 到購票頁，或將票種帶入下一步
+    // 可以改成 navigate 到購票頁，或將票種帶入下一步
     navigate(`/ticket?id=${id}&type=${encodeURIComponent(ticketType)}`)
   }
 
@@ -34,7 +34,7 @@ export default function Concert() {
     <div className="p-6 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold mb-4">{concert.name}</h1>
       <img
-        src={concert.image_url || '/default.jpg'}
+        src={concert.image_url}
         alt={concert.name}
         className="w-full h-64 object-cover rounded mb-4"
       />
