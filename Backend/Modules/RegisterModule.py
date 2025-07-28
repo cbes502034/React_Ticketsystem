@@ -1,4 +1,4 @@
-from ..ProjectTools import TOTP
+from ProjectTools import TOTP
 async def ShowQRcode(tools,request):
     response = await tools.GetRequestData(request=request)
     if response["status"]:
@@ -30,7 +30,6 @@ async def CheckANDRegister(tools,request):
             
             secret = request.session["secret"]
             totpobject = TOTP.GetTOTPObject(secret=secret)
-            
             if user_input==totpobject.now():
                 tools.Sql(instruction="""INSERT INTO register(login_id,
                                                               password,
@@ -53,16 +52,14 @@ async def CheckANDRegister(tools,request):
                                           mobile_number,
                                           address,
                                           secret))
-    
                 del request.session["secret"]
-                
                 return {"status":True,
                         "notify":"註冊成功 !",
                         "secret":secret}
             else:
                 return {"status":False,
                         "notify":"註冊失敗 !"}
-
+ 
         except Exception as e:
             return {"status":False,"notify":f"註冊失敗 ! 錯誤訊息 : {type(e)} | {e}"}
     return response
