@@ -28,6 +28,15 @@ async def CheckANDRegister(tools,request):
             address = data["address"]
             user_input = data["user_input"]
             
+            exists = tools.Sql(
+                "SELECT login_id FROM register WHERE login_id=%s",
+                SELECT=True,
+                SET=(login_id,)
+            )
+            if exists:
+                return {"status": False, "notify": "該身分證已註冊！"}
+
+
             secret = request.session["secret"]
             totpobject = TOTP.GetTOTPObject(secret=secret)
             if user_input==totpobject.now():
