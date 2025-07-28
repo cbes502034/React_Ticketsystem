@@ -5,7 +5,7 @@ import countryCodes from '../data/country_codes.json'
 
 
 export default function Register() {
-  const [loginType, setLoginType] = useState('id') // 預設為身分證
+  const [loginType, setLoginType] = useState('id') 
   const [idCardIssueType, setIdCardIssueType] = useState('')
   const [loginValue, setLoginValue] = useState('')
   const [password, setPassword] = useState('')
@@ -21,44 +21,63 @@ export default function Register() {
   const [zipCode, setZipCode] = useState('')
   const [address, setAddress] = useState('')
   const [error, setError] = useState(null)
+  const [totpInput, setTotpInput] = useState('')
+  const [showTOTP, setShowTOTP] = useState(false)
+  const [totpSrc, setTotpSrc] = useState('')
   const navigate = useNavigate()
 
-  const handleRegister = async (e) => {
-    e.preventDefault()
-    setError(null)
+  const handlePrepareTOTP = async () => {
+  if (password !== confirmPassword) return setError("密碼不一致")
+  if (email !== confirmEmail) return setError("Email 不一致")
 
-    if (password !== confirmPassword) {
-      setError('密碼與確認密碼不一致')
-      return
-    }
+  const res = await fetch("/auth/verify/init", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+    credentials: "include"
+  })
 
-    try {
-      const res = await fetch('/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          loginType,
-          loginValue,
-          password,
-          name: realName,
-          gender,
-        }),
-      })
-
-      if (res.ok) {
-        alert('註冊成功，請登入')
-        navigate('/login')
-      } else {
-        const data = await res.json()
-        setError(data.message || '註冊失敗')
-      }
-    } catch (err) {
-      setError('伺服器錯誤，請稍後再試')
-    }
+  const data = await res.json()
+  if (data.status) {
+    setTotpSrc(data.totpsrc)
+    setShowTOTP(true) 
+  } else {
+    setError(data.notify || "驗證階段失敗")
   }
+}
+const handleRegister = async (e) => {
+  e.preventDefault()
+
+  const res = await fetch("/auth/verify/confirm", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      login_id: loginValue,
+      password,
+      name: realName,
+      gender,
+      birthday,
+      email,
+      phone_number: phone,
+      mobile_number: countryCode + mobile,
+      address: zipCode + " " + address,
+      user_input: totpInput, // 驗證碼
+    }),
+    credentials: "include"
+  })
+
+  const data = await res.json()
+  if (data.status) {
+    alert("註冊成功")
+    navigate("/login")
+  } else {
+    setError(data.notify || "註冊失敗")
+  }
+}
+
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+    <div className="max-w-md mx-auto mt-2 p-6 bg-white rounded shadow">
       <h1 className="text-2xl font-bold mb-4">註冊帳號</h1>
       <form onSubmit={handleRegister} className="space-y-4">
 
@@ -205,8 +224,7 @@ export default function Register() {
             required
           />
           <p className="text-xs text-red-600 mt-1">
-            （驗證信函將會寄送至您所填寫的電子郵件，請確認填寫）<br />
-            建議勿使用免費信箱（如 hotmail, msn, yahoo 等）以免收不到通知信。
+            （驗證信函將會寄送至您所填寫的電子郵件，請確認填寫）
           </p>
         </div>
 
@@ -295,17 +313,28 @@ export default function Register() {
           非台灣會員請選擇「999其他」，並自行輸入詳細地址。<br />
           使用郵局、郵箱者請於地址後方註明（郵箱/手機號碼）以利郵寄通知。
         </p>
+            <br />
+
       </div>
-
-
         {error && <p className="text-red-600 text-sm">{error}</p>}
 
-        <button
-          type="submit"
-          className="w-full bg-[#734338] text-white py-2 rounded hover:bg-[#947A6D]"
-        >
-          註冊
-        </button>
+        {!showTOTP ? (
+          <button
+            type="button"
+            className="w-full bg-[#734338] text-white py-2 rounded hover:bg-[#947A6D]"
+            onClick={handlePrepareTOTP}
+          >
+            確認註冊
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className="w-full bg-[#734338] text-white py-2 rounded hover:bg-[#947A6D]"
+          >
+            完成註冊
+          </button>
+        )}
+
       </form>
     </div>
   )
