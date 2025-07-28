@@ -2,8 +2,8 @@ from fastapi import FastAPI,Request
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from ProjectTools.Tools import Tools
-from Modules import RegisterModule,LoginModule,IndexModule,LogoutModule,ProfileModule,TicketModule
+from .ProjectTools.Tools import Tools
+from .Modules import RegisterModule,LoginModule,IndexModule,LogoutModule,ProfileModule,TicketModule
 
 app = FastAPI()
 KEY = "ticket_key"
