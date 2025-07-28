@@ -3,23 +3,27 @@ def GetProfileData(tools,request):
         return list(map(lambda _:list(_),data))
     try:
         login_id = request.session["UserID"]
-        columns = ["login_id",
-                   "name",
-                   "gender",
-                   "birthday",
-                   "email",
-                   "phone_number",
-                   "mobile_number",
-                   "address"]
+        profileColumn = ["login_id",
+                             "name",
+                           "gender",
+                         "birthday",
+                            "email",
+                     "phone_number",
+                    "mobile_number",
+                          "address"]
+        
+        ticketColumn = ["area",
+                         "`row`",
+                      "`column`"]
         
         profileData = TupleToList(tools.Sql(
-                                                 instruction=f"""SELECT {",".join(columns)} FROM register 
+                                                 instruction=f"""SELECT {",".join(profileColumn)} FROM register 
                                                                 WHERE login_id=%s""",
                                                  SELECT=True,
                                                  SET=(login_id,)
                                                  ))[0]
         ticketData = [TupleToList(tools.Sql(
-                                                instruction="""SELECT *FROM ticket 
+                                                instruction=f"""SELECT {",".join(ticketColumn)} FROM ticket 
                                                                WHERE login_id=%s""",
                                                 SELECT=True,
                                                 SET=(login_id,)
@@ -27,7 +31,7 @@ def GetProfileData(tools,request):
         
         profileData = profileData+ticketData
     
-        profileData = dict(zip(columns+["ticket"],profileData))
+        profileData = dict(zip(profileColumn+["ticket"],profileData))
         
         return {"status":True,
                 "notify":"會員資料提取完成 !",
