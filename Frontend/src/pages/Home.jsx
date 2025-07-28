@@ -21,7 +21,7 @@ export default function Home() {
           {concerts.map(concert => (
             <div key={concert.id} className="bg-white rounded-lg shadow-md overflow-hidden card">
               <img
-                src={concert.image_url || '/default.jpg'}
+                src={concert.image_url}
                 alt={concert.name}
                 className="w-full h-48 object-cover"
               />

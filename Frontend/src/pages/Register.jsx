@@ -6,6 +6,7 @@ import countryCodes from '../data/country_codes.json'
 
 export default function Register() {
   const [loginType, setLoginType] = useState('id') // 預設為身分證
+  const [idCardIssueType, setIdCardIssueType] = useState('')
   const [loginValue, setLoginValue] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -93,14 +94,34 @@ export default function Register() {
               <p className="text-xs text-red-600 ml-6">(非本國人士)</p>
             </label>
           </div>
-          <input
-            type="text"
-            className="w-full border px-3 py-2 rounded"
-            placeholder={loginType === 'id' ? '請輸入身分證字號' : '請輸入護照/居留證號碼'}
-            value={loginValue}
-            onChange={(e) => setLoginValue(e.target.value)}
-            required
-          />
+          
+          <div className="flex space-x-2">
+              <input
+                type="text"
+                className="flex-1 border px-3 py-2 rounded"
+                placeholder={loginType === 'id' ? '請輸入身分證字號' : '請輸入護照/居留證號碼'}
+                value={loginValue}
+                onChange={(e) => setLoginValue(e.target.value)}
+                required
+              />
+
+              {/* 下拉選單：僅在選擇身分證時顯示 */}
+              {loginType === 'id' && (
+                <select
+                  className="w-32 border px-2 py-2 rounded"
+                  value={idCardIssueType}
+                  onChange={(e) => setIdCardIssueType(e.target.value)}
+                  required
+                >
+                  <option value="">請選擇類別</option>
+                  <option value="initial">初發</option>
+                  <option value="reissue">補發</option>
+                  <option value="renewal">換發</option>
+                </select>
+              )}
+          </div>
+
+
         </div>
 
         {/* 密碼 */}

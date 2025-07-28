@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import AuthPage from './pages/Auth'
+import Concerts from './pages/ConcertList'
 //import Login from './pages/Login'
 //import Register from './pages/Register'
 //import Concert from './pages/Concert'
@@ -13,6 +14,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/concerts" element={<Concerts />} />
         {/*<Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/concert/:id" element={<Concert />} />*/}
