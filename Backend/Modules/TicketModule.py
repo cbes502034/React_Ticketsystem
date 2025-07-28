@@ -32,5 +32,4 @@ async def GetTicketData(tools,request):
 async def CheckTicketPurchased(tools,request):
     purChased = tools.Sql(instruction="""SELECT area,`row`,`column` FROM ticket""",
                           SELECT=True)
-    
     return{"purchased":purChased}
