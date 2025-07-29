@@ -27,54 +27,69 @@ export default function Register() {
   const navigate = useNavigate()
 
   const handlePrepareTOTP = async () => {
-  if (password !== confirmPassword) return setError("密碼不一致")
-  if (email !== confirmEmail) return setError("Email 不一致")
+    setError(null)
+    if (password !== confirmPassword) return setError("密碼不一致")
+    if (email !== confirmEmail) return setError("Email 不一致")
 
-  const res = await fetch("/auth/verify/init", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email }),
-    credentials: "include"
-  })
+    try {
+      const res = await fetch("/auth/verify/init", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+        credentials: "include"
+      })
 
-  const data = await res.json()
-  if (data.status) {
-    setTotpSrc(data.totpsrc)
-    setShowTOTP(true) 
-  } else {
-    setError(data.notify || "驗證階段失敗")
+      const data = await res.json()
+      if (data.status) {
+        setTotpSrc(data.totpsrc)
+        setShowTOTP(true)
+      } else {
+        setError(data.notify || "驗證階段失敗")
+      }
+    } catch (err) {
+      setError("伺服器錯誤，請稍後再試")
+    }
   }
-}
-const handleRegister = async (e) => {
-  e.preventDefault()
 
-  const res = await fetch("/auth/verify/confirm", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      login_id: loginValue,
-      password,
-      name: realName,
-      gender,
-      birthday,
-      email,
-      phone_number: phone,
-      mobile_number: countryCode + mobile,
-      address: zipCode + " " + address,
-      user_input: totpInput, // 驗證碼
-    }),
-    credentials: "include"
-  })
+  const handleRegister = async (e) => {
+    e.preventDefault()
+    setError(null)
 
-  const data = await res.json()
-  if (data.status) {
-    alert("註冊成功")
-    navigate("/login")
-  } else {
-    setError(data.notify || "註冊失敗")
+    if (!/^\d{6}$/.test(totpInput)) {
+      return setError("請輸入正確的 6 碼驗證碼")
+    }
+
+    try {
+      const res = await fetch("/auth/verify/confirm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          login_id: loginValue,
+          loginType,
+          password,
+          name: realName,
+          gender,
+          birthday,
+          email,
+          phone_number: phone,
+          mobile_number: countryCode + mobile,
+          address: zipCode + " " + address,
+          user_input: totpInput
+        }),
+        credentials: "include"
+      })
+
+      const data = await res.json()
+      if (data.status) {
+        alert("註冊成功")
+        navigate("/login")
+      } else {
+        setError(data.notify || "註冊失敗")
+      }
+    } catch (err) {
+      setError("伺服器錯誤，請稍後再試")
+    }
   }
-}
-
 
   return (
     <div className="max-w-md mx-auto mt-2 p-6 bg-white rounded shadow">
@@ -318,6 +333,24 @@ const handleRegister = async (e) => {
       </div>
         {error && <p className="text-red-600 text-sm">{error}</p>}
 
+          {showTOTP && (
+          <div>
+            <label className="block text-sm font-medium">*驗證碼（6 碼 TOTP）:</label>
+            <input
+              type="text"
+              className="w-full border px-3 py-2 rounded"
+              placeholder="請輸入 Google Authenticator 產生的驗證碼"
+              value={totpInput}
+              onChange={(e) => setTotpInput(e.target.value)}
+              required
+            />
+          </div>
+        )}
+
+        {/* 錯誤訊息 */}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
+
+        {/* 按鈕切換 */}
         {!showTOTP ? (
           <button
             type="button"
@@ -327,14 +360,22 @@ const handleRegister = async (e) => {
             確認註冊
           </button>
         ) : (
-          <button
-            type="submit"
-            className="w-full bg-[#734338] text-white py-2 rounded hover:bg-[#947A6D]"
-          >
-            完成註冊
-          </button>
+          <>
+            {/* 顯示 QR Code */}
+            {totpSrc && (
+              <div className="text-center my-4">
+                <p className="text-sm text-gray-600 mb-2">請使用 Google Authenticator 掃描 QR Code 並輸入驗證碼：</p>
+                <img src={totpSrc} alt="TOTP QR Code" className="mx-auto w-40 h-40" />
+              </div>
+            )}
+            <button
+              type="submit"
+              className="w-full bg-[#734338] text-white py-2 rounded hover:bg-[#947A6D]"
+            >
+              完成註冊
+            </button>
+          </>
         )}
-
       </form>
     </div>
   )
