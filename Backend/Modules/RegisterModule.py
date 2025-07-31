@@ -18,7 +18,6 @@ async def CheckANDRegister(tools,request):
         try:
             data = response["data"]
             login_id = data["login_id"]
-            loginType= data["loginType"]
             password = data["password"]
             name = data["name"]
             gender = data["gender"]
@@ -29,20 +28,10 @@ async def CheckANDRegister(tools,request):
             address = data["address"]
             user_input = data["user_input"]
             
-            exists = tools.Sql(
-                "SELECT login_id FROM register WHERE login_id=%s",
-                SELECT=True,
-                SET=(login_id,)
-            )
-            if exists:
-                return {"status": False, "notify": "該身分證已註冊！"}
-
-
             secret = request.session["secret"]
             totpobject = TOTP.GetTOTPObject(secret=secret)
             if user_input==totpobject.now():
                 tools.Sql(instruction="""INSERT INTO register(login_id,
-                                                              loginType,
                                                               password,
                                                               name,
                                                               gender,
@@ -54,7 +43,6 @@ async def CheckANDRegister(tools,request):
                                                               secret)
                                          VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
                                      SET=(login_id,
-                                          loginType,
                                           password,
                                           name,
                                           gender,

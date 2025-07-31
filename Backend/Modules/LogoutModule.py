@@ -1,6 +1,6 @@
 async def Logout(request):
-    del request.session["UserName"]
-    del request.session["UserID"]
-    return {"status":True,
-            "notify":"登出成功 !",
-            "session":"尚未登入"}
+    for key in ["UserName", "UserID", "RegisterID"]:
+        request.session.pop(key, None)
+    return {"status": True,
+            "notify": "登出成功 !",
+            "session": "尚未登入"}
