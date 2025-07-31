@@ -11,13 +11,21 @@ async def Check(tools,request):
                                  SET=(login_idInput,passwordInput))
             if userData:
                 name = tools.Sql(instruction="""SELECT name FROM register 
-                                                WHERE login_id=%s AND password=%s AND secret=%s""",
+                                                WHERE login_id=%s AND password=%s""",
+                                                SELECT=True,
+                                                SET=(login_idInput,passwordInput))[0][0]
+                ID = tools.Sql(instruction="""SELECT id FROM register 
+                                                WHERE login_id=%s AND password=%s""",
                                                 SELECT=True,
                                                 SET=(login_idInput,passwordInput))[0][0]
                 request.session["UserID"] = login_idInput
                 request.session["UserName"] = name
+                request.session["RegisterID"] = ID
                 return{"status":True,
-                       "notify":"登入成功 !"}
+                       "notify":"登入成功 !",
+                       "UserID":login_idInput,
+                       "UserName":name,
+                       "RegisterID":ID}
             else:
                 return{"status":False,
                        "notify":"登入失敗 !"}
