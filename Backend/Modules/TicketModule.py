@@ -1,4 +1,4 @@
-from ProjectTools import TOTP
+from ..ProjectTools import TOTP
 async def GetTicketData(tools,request):
     response = await tools.GetRequestData(request = request)
     if response["status"]:
@@ -33,3 +33,4 @@ async def CheckTicketPurchased(tools,request):
     purChased = tools.Sql(instruction="""SELECT area,`row`,`column` FROM ticket""",
                           SELECT=True)
     return{"purchased":purChased}
+

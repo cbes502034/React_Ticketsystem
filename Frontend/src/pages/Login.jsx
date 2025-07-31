@@ -34,7 +34,7 @@ export default function Login() {
   }
 }
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow border border-gray-300">
+    <div className="max-w-md mx-auto mt-2 p-6 bg-white rounded shadow border border-gray-300">
       <h2 className="text-xl font-bold text-center mb-6">請先登入會員方可購票及使用會員服務</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4 text-sm text-gray-700">
