@@ -2,24 +2,16 @@ from fastapi import FastAPI,Request
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from ProjectTools.Tools import Tools
-from Modules import RegisterModule,LoginModule,IndexModule,LogoutModule,ProfileModule,TicketModule
+from .ProjectTools.Tools import Tools
+from .Modules import RegisterModule,LoginModule,IndexModule,LogoutModule,ProfileModule,TicketModule
 
+import os
+from dotenv import load_dotenv
 app = FastAPI()
 KEY = "ticket_key"
 app.add_middleware(SessionMiddleware,secret_key=KEY)
 #mysql://root:DdAmmOtQGtxHmxhCiTZTxYmSgrnLlBSk@gondola.proxy.rlwy.net:51385/railway
-'''
-tools = Tools(
-                USER = "root",
-                PASSWORD = "DdAmmOtQGtxHmxhCiTZTxYmSgrnLlBSk",
-                HOST = "gondola.proxy.rlwy.net",
-                PORT = 51385,
-                DATABASE = "GJun"
-              )
-'''
-import os
-from dotenv import load_dotenv
+
 load_dotenv()
 tools = Tools(
                 USER = os.getenv("MYSQLUSER"),
@@ -28,7 +20,7 @@ tools = Tools(
                 PORT = int(os.getenv("MYSQLPORT")),
                 DATABASE = os.getenv("MYSQLPORT")
               )
-#'''
+
 @app.post("/auth/verify/init")
 async def ShowQRcode(request: Request):
     response = await RegisterModule.ShowQRcode(tools=tools,request=request)
@@ -60,11 +52,11 @@ async def User(request : Request):
     return JSONResponse(response)
 
 @app.post("/ticket")
-async def Ticket(request : Request):
+async def GetTicket(request : Request):
     response = await TicketModule.GetTicketData(tools=tools, request=request)
     return JSONResponse(response)
 
-@app.get("/ticket/availability")
+@app.post("/ticket/availability")
 async def GetTicketAvailability(request : Request):
     response = await TicketModule.CheckTicketPurchased(tools=tools, request=request)
     return JSONResponse(response)
