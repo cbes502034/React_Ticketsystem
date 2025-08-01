@@ -45,7 +45,7 @@ async def CheckANDRegister(tools,request):
                                                               mobile_number,
                                                               address,
                                                               secret)
-                                         VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                                         VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
                                      SET=(login_id,
                                           IdType,
                                           loginType,
