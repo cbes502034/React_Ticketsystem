@@ -6,7 +6,7 @@ import countryCodes from '../data/country_codes.json'
 
 export default function Register() {
   const [loginType, setLoginType] = useState('id') 
-  const [idCardIssueType, setIdCardIssueType] = useState('')
+  const [IdType, setIdType] = useState('')
   const [loginValue, setLoginValue] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -65,6 +65,7 @@ export default function Register() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           login_id: loginValue,
+          IdType,
           loginType,
           password,
           name: realName,
@@ -143,8 +144,8 @@ export default function Register() {
               {loginType === 'id' && (
                 <select
                   className="w-32 border px-2 py-2 rounded"
-                  value={idCardIssueType}
-                  onChange={(e) => setIdCardIssueType(e.target.value)}
+                  value={IdType}
+                  onChange={(e) => setIdType(e.target.value)}
                   required
                 >
                   <option value="">請選擇類別</option>
