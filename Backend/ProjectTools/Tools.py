@@ -7,6 +7,7 @@ class Tools:
         self.host = HOST
         self.port = PORT
         self.database = DATABASE
+        print(f"[DB INIT] Connecting to DB: {self.database}")
 
     def Sql(self, instruction, SELECT=False, SET=None):
         con = pymysql.connect(
