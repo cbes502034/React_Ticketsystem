@@ -32,7 +32,7 @@ export default function Register() {
     if (email !== confirmEmail) return setError("Email 不一致")
 
     try {
-      const res = await fetch("https://reactticketsystem-production.up.railway.app//auth/verify/init", {
+      const res = await fetch("https://reactticketsystem-production.up.railway.app/auth/verify/init", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -60,7 +60,7 @@ export default function Register() {
     }
 
     try {
-      const res = await fetch("https://reactticketsystem-production.up.railway.app//auth/verify/confirm", {
+      const res = await fetch("https://reactticketsystem-production.up.railway.app/auth/verify/confirm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
