@@ -18,7 +18,8 @@ tools = Tools(
                 PASSWORD = os.getenv("MYSQLPASSWORD"),
                 HOST = os.getenv("MYSQLHOST"),
                 PORT = int(os.getenv("MYSQLPORT")),
-                DATABASE = os.getenv("MYSQLDATABASE")
+                DATABASE = "railway"
+                #DATABASE = os.getenv("MYSQLDATABASE")
               )
 
 @app.post("/auth/verify/init")
