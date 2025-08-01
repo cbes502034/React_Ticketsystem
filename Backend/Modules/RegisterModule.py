@@ -33,7 +33,7 @@ async def CheckANDRegister(tools,request):
             secret = request.session["secret"]
             totpobject = TOTP.GetTOTPObject(secret=secret)
             if user_input==totpobject.now():
-                tools.Sql(instruction="""INSERT INTO register(login_id,
+                tools.Sql(instruction="""INSERT INTO registerlist(login_id,
                                                               IdType,
                                                               loginType,
                                                               password,
