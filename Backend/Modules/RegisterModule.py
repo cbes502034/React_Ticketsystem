@@ -18,6 +18,8 @@ async def CheckANDRegister(tools,request):
         try:
             data = response["data"]
             login_id = data["login_id"]
+            IdType = data["IdType"]
+            loginType = data["loginType"]
             password = data["password"]
             name = data["name"]
             gender = data["gender"]
@@ -32,6 +34,8 @@ async def CheckANDRegister(tools,request):
             totpobject = TOTP.GetTOTPObject(secret=secret)
             if user_input==totpobject.now():
                 tools.Sql(instruction="""INSERT INTO register(login_id,
+                                                              IdType,
+                                                              loginType,
                                                               password,
                                                               name,
                                                               gender,
@@ -43,6 +47,8 @@ async def CheckANDRegister(tools,request):
                                                               secret)
                                          VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
                                      SET=(login_id,
+                                          IdType,
+                                          loginType,
                                           password,
                                           name,
                                           gender,
