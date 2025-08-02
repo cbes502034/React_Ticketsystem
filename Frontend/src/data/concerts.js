@@ -15,7 +15,7 @@ const concertsData = [
     "name": "Radiohead World Tour 2025",
     "date": "2025-10-12",
     "location": "台北大巨蛋",
-    "aliases": ["酷玩", "cold play", "冷玩樂團","台北","Taipei"],
+    "aliases": ["radiohead", "Radio Head", "雷射頭", "雷電頭", "雷帝歐黑德", "radio head"],
     "image_url": Radiohead
   },
   {
@@ -36,6 +36,7 @@ const concertsData = [
     "location": "高雄流行音樂中心",
     "location-id":"Kaohsiung",
     "location-idtw":"高雄",
+    "aliases": ["david bowie", "大衛鮑伊", "大衛鮑威", "戴維鮑伊", "d. bowie", "david b."],
     "image_url": Bowie
   },
   {
@@ -45,6 +46,7 @@ const concertsData = [
     "location": "台北大巨蛋",
     "location-id":"Taipei",
     "location-idtw":"台北",
+    "aliases": ["lady gaga", "雷迪嘎嘎", "女神卡卡", "嘎嘎", "嘎嘎小姐", "gaga", "lady g."],
     "image_url": GAGA
   },
   {
@@ -54,6 +56,7 @@ const concertsData = [
     "location": "林口體育館",
     "location-id":"New Taipei",
     "location-idtw":"新北",
+    "aliases": ["linkin park", "林肯公園", "林金帕克", "linken park", "linking park"],
     "image_url": LinkinPark
   },
   {
@@ -63,6 +66,7 @@ const concertsData = [
     "location": "台北小巨蛋",
     "location-id":"Taipei",
     "location-idtw":"台北",
+    "aliases": ["yoasobi", "夜遊", "夜遊bi", "ヨアソビ", "YOA SOBI", "yoa sobi"],
     "image_url": YOASOBI
   },
   {
@@ -72,6 +76,7 @@ const concertsData = [
     "location": "Legacy Taipei",
     "location-id":"Taipei",
     "location-idtw":"台北",
+    "aliases": ["chappell roan", "chapel roan", "chappel roan", "夏普羅安", "夏佩兒羅安"],
     "image_url": Chappell
   },
   {
@@ -79,6 +84,7 @@ const concertsData = [
     "name": "Green Day - The American Idiot Revival",
     "date": "2025-09-09",
     "location": "台中圓滿戶外劇場",
+    "aliases": ["green day", "綠日", "綠日合唱團", "綠黨", "green days"],
     "image_url": GreenDay
   },
   {
@@ -86,8 +92,10 @@ const concertsData = [
     "name": "Daft Punk Reunion DJ Night",
     "date": "2025-08-25",
     "location": "台北信義 Warehouse",
+    "aliases": ["chappell roan", "chapel roan", "chappel roan", "夏普羅安", "夏佩兒羅安"],
     "location-id":"Taipei",
     "location-idtw":"台北",
+    "aliases": ["daft punk", "達夫龐克", "傻瓜龐克", "打夫龐克", "達夫朋克", "daftpunk"],
     "image_url": DaftPunk
   },
   {
