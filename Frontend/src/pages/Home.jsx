@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import concertsData from '../data/concerts.json'
+import concertsData from '../data/concerts'
 
 
 export default function Home() {
@@ -9,6 +9,7 @@ export default function Home() {
   useEffect(() => {
     setConcerts(concertsData)
   }, [])
+
 
   return (
     <div className="pt-20 p-6 bg-brand-bg min-h-screen text-brand-text">
@@ -21,7 +22,7 @@ export default function Home() {
           {concerts.map(concert => (
             <div key={concert.id} className="bg-white rounded-lg shadow-md overflow-hidden card">
               <img
-                src={concert.image_url || '/default.jpg'}
+                src={concert.image_url}
                 alt={concert.name}
                 className="w-full h-48 object-cover"
               />

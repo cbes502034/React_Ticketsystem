@@ -5,7 +5,8 @@ import countryCodes from '../data/country_codes.json'
 
 
 export default function Register() {
-  const [loginType, setLoginType] = useState('id') // 預設為身分證
+  const [loginType, setLoginType] = useState('id') 
+  const [IdType, setIdType] = useState('')
   const [loginValue, setLoginValue] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -20,44 +21,79 @@ export default function Register() {
   const [zipCode, setZipCode] = useState('')
   const [address, setAddress] = useState('')
   const [error, setError] = useState(null)
+  const [totpInput, setTotpInput] = useState('')
+  const [showTOTP, setShowTOTP] = useState(false)
+  const [totpSrc, setTotpSrc] = useState('')
   const navigate = useNavigate()
+
+  const handlePrepareTOTP = async () => {
+    setError(null)
+    if (password !== confirmPassword) return setError("密碼不一致")
+    if (email !== confirmEmail) return setError("Email 不一致")
+
+    try {
+      const res = await fetch("https://reactticketsystem-production.up.railway.app/auth/verify/init", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+        credentials: "include"
+      })
+
+      const data = await res.json()
+      if (data.status) {
+        setTotpSrc(data.totpsrc)
+        setShowTOTP(true)
+      } else {
+        setError(data.notify || "驗證階段失敗")
+      }
+    } catch (err) {
+      setError("伺服器錯誤，請稍後再試")
+    }
+  }
 
   const handleRegister = async (e) => {
     e.preventDefault()
     setError(null)
 
-    if (password !== confirmPassword) {
-      setError('密碼與確認密碼不一致')
-      return
+    if (!/^\d{6}$/.test(totpInput)) {
+      return setError("請輸入正確的 6 碼驗證碼")
     }
 
     try {
-      const res = await fetch('/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("https://reactticketsystem-production.up.railway.app/auth/verify/confirm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          login_id: loginValue,
+          IdType,
           loginType,
-          loginValue,
           password,
           name: realName,
           gender,
+          birthday,
+          email,
+          phone_number: phone,
+          mobile_number: countryCode + mobile,
+          address: zipCode + " " + address,
+          user_input: totpInput
         }),
+        credentials: "include"
       })
 
-      if (res.ok) {
-        alert('註冊成功，請登入')
-        navigate('/login')
+      const data = await res.json()
+      if (data.status) {
+        alert("註冊成功")
+        navigate("/login")
       } else {
-        const data = await res.json()
-        setError(data.message || '註冊失敗')
+        setError(data.notify || "註冊失敗")
       }
     } catch (err) {
-      setError('伺服器錯誤，請稍後再試')
+      setError("伺服器錯誤，請稍後再試")
     }
   }
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+    <div className="max-w-md mx-auto mt-2 p-6 bg-white rounded shadow">
       <h1 className="text-2xl font-bold mb-4">註冊帳號</h1>
       <form onSubmit={handleRegister} className="space-y-4">
 
@@ -93,14 +129,34 @@ export default function Register() {
               <p className="text-xs text-red-600 ml-6">(非本國人士)</p>
             </label>
           </div>
-          <input
-            type="text"
-            className="w-full border px-3 py-2 rounded"
-            placeholder={loginType === 'id' ? '請輸入身分證字號' : '請輸入護照/居留證號碼'}
-            value={loginValue}
-            onChange={(e) => setLoginValue(e.target.value)}
-            required
-          />
+          
+          <div className="flex space-x-2">
+              <input
+                type="text"
+                className="flex-1 border px-3 py-2 rounded"
+                placeholder={loginType === 'id' ? '請輸入身分證字號' : '請輸入護照/居留證號碼'}
+                value={loginValue}
+                onChange={(e) => setLoginValue(e.target.value)}
+                required
+              />
+
+              {/* 下拉選單：僅在選擇身分證時顯示 */}
+              {loginType === 'id' && (
+                <select
+                  className="w-32 border px-2 py-2 rounded"
+                  value={IdType}
+                  onChange={(e) => setIdType(e.target.value)}
+                  required
+                >
+                  <option value="">請選擇類別</option>
+                  <option value="initial">初發</option>
+                  <option value="reissue">補發</option>
+                  <option value="renewal">換發</option>
+                </select>
+              )}
+          </div>
+
+
         </div>
 
         {/* 密碼 */}
@@ -184,8 +240,7 @@ export default function Register() {
             required
           />
           <p className="text-xs text-red-600 mt-1">
-            （驗證信函將會寄送至您所填寫的電子郵件，請確認填寫）<br />
-            建議勿使用免費信箱（如 hotmail, msn, yahoo 等）以免收不到通知信。
+            （驗證信函將會寄送至您所填寫的電子郵件，請確認填寫）
           </p>
         </div>
 
@@ -274,17 +329,54 @@ export default function Register() {
           非台灣會員請選擇「999其他」，並自行輸入詳細地址。<br />
           使用郵局、郵箱者請於地址後方註明（郵箱/手機號碼）以利郵寄通知。
         </p>
+            <br />
+
       </div>
-
-
         {error && <p className="text-red-600 text-sm">{error}</p>}
 
-        <button
-          type="submit"
-          className="w-full bg-[#734338] text-white py-2 rounded hover:bg-[#947A6D]"
-        >
-          註冊
-        </button>
+          {showTOTP && (
+          <div>
+            <label className="block text-sm font-medium">*驗證碼（6 碼 TOTP）:</label>
+            <input
+              type="text"
+              className="w-full border px-3 py-2 rounded"
+              placeholder="請輸入 Google Authenticator 產生的驗證碼"
+              value={totpInput}
+              onChange={(e) => setTotpInput(e.target.value)}
+              required
+            />
+          </div>
+        )}
+
+        {/* 錯誤訊息 */}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
+
+        {/* 按鈕切換 */}
+        {!showTOTP ? (
+          <button
+            type="button"
+            className="w-full bg-[#734338] text-white py-2 rounded hover:bg-[#947A6D]"
+            onClick={handlePrepareTOTP}
+          >
+            確認註冊
+          </button>
+        ) : (
+          <>
+            {/* 顯示 QR Code */}
+            {totpSrc && (
+              <div className="text-center my-4">
+                <p className="text-sm text-gray-600 mb-2">請使用 Google Authenticator 掃描 QR Code 並輸入驗證碼：</p>
+                <img src={totpSrc} alt="TOTP QR Code" className="mx-auto w-40 h-40" />
+              </div>
+            )}
+            <button
+              type="submit"
+              className="w-full bg-[#734338] text-white py-2 rounded hover:bg-[#947A6D]"
+            >
+              完成註冊
+            </button>
+          </>
+        )}
       </form>
     </div>
   )

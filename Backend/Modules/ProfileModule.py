@@ -1,37 +1,60 @@
+from fastapi.encoders import jsonable_encoder
 def GetProfileData(tools,request):
     def TupleToList(data):
         return list(map(lambda _:list(_),data))
     try:
-        login_id = request.session["User"]
-        columns = ["login_id",
-                   "name",
-                   "gender",
-                   "birthday",
-                   "email",
-                   "phone_number",
-                   "mobile_number",
-                   "address"]
+        login_id = request.session["UserID"]
+        profileColumn = ["login_id",
+                             "name",
+                           "gender",
+                         "birthday",
+                            "email",
+                     "phone_number",
+                    "mobile_number",
+                          "address"]
+        
+        ticketColumn = ["title",
+                        "date",
+                        "location",
+                        "area",
+                         "`row`",
+                      "`column`",]
+        
+        registerID = request.session["RegisterID"]
         
         profileData = TupleToList(tools.Sql(
-                                                 instruction=f"""SELECT {",".join(columns)} FROM register 
-                                                                WHERE login_id=%s""",
+                                                 instruction=f"""SELECT {",".join(profileColumn)}
+                                                                 FROM register 
+                                                                 WHERE login_id=%s""",
                                                  SELECT=True,
                                                  SET=(login_id,)
                                                  ))[0]
-        ticketData = [TupleToList(tools.Sql(
-                                                instruction="""SELECT *FROM ticket 
-                                                               WHERE login_id=%s""",
+        ticketData = TupleToList(tools.Sql(
+                                                instruction=f"""SELECT {",".join(ticketColumn)} 
+                                                                FROM ticket
+                                                                INNER JOIN `event` 
+                                                                ON  `event`.id = ticket.event_id 
+                                                                WHERE register_id = %s""",
                                                 SELECT=True,
-                                                SET=(login_id,)
-                                                ))]
+                                                SET=(registerID,)
+                                                ))
         
-        profileData = profileData+ticketData
+        for i in range(len(ticketData)):
+            seat = ticketData[i]
+            column = seat.pop()
+            row = seat.pop()
+            area = seat.pop()
+            seat+=[f"{area:<6} | 第{row:>2}排 第{column:>2}位"]
+            ticketData[i] = seat
+
+        profileData = profileData+[ticketData]
     
-        profileData = dict(zip(columns+["ticket"],profileData))
+        profileData = dict(zip(profileColumn+["ticket"],profileData))
+        
         
         return {"status":True,
                 "notify":"會員資料提取完成 !",
-                "profileData":profileData}
+                "profileData":jsonable_encoder(profileData)}
     
     except Exception as e:
         return {"status":True,
