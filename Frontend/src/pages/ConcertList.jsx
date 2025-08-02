@@ -31,7 +31,6 @@ export default function ConcertList() {
 
   return (
     <div className="pt-24 px-4 bg-brand-bg min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center">Event Calendar</h1>
 
       {/* 活動區塊 */}
       {Object.entries(groupedConcerts).map(([month, concertsInMonth]) => (
