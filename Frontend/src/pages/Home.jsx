@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import concertsData from '../data/concerts.json'
+import concertsData from '../data/concerts'
 
 
 export default function Home() {
@@ -9,6 +9,7 @@ export default function Home() {
   useEffect(() => {
     setConcerts(concertsData)
   }, [])
+
 
   return (
     <div className="pt-20 p-6 bg-brand-bg min-h-screen text-brand-text">
