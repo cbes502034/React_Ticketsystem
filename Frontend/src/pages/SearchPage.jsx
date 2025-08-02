@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLocation, Link } from 'react-router-dom'
-import concertsData from '../concerts'
+import concertsData from '../data/concerts'
 
 function normalize(str) {
   return str
