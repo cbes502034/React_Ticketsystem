@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 app = FastAPI()
 KEY = "ticket_key"
 app.add_middleware(SessionMiddleware,secret_key=KEY)
-#mysql://root:DdAmmOtQGtxHmxhCiTZTxYmSgrnLlBSk@gondola.proxy.rlwy.net:51385/railway
+#mysql://root:DdAmmOtQGtxHmxhCiTZTxYmSgrnLlBSk@gondola.proxy.rlwy.net:51385/GJun
 
 load_dotenv()
 url = urlparse(os.getenv("MYSQLPUBLICURL"))

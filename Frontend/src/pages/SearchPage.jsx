@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLocation, Link } from 'react-router-dom'
-import concertsData from '../concerts.json' // 請根據你實際的路徑調整
+import concertsData from '../data/concerts'
 
 function normalize(str) {
   return str
