@@ -7,18 +7,20 @@ from .Modules import RegisterModule,LoginModule,IndexModule,LogoutModule,Profile
 
 import os
 from dotenv import load_dotenv
+from urllib.parse import urlparse
 app = FastAPI()
 KEY = "ticket_key"
 app.add_middleware(SessionMiddleware,secret_key=KEY)
 #mysql://root:DdAmmOtQGtxHmxhCiTZTxYmSgrnLlBSk@gondola.proxy.rlwy.net:51385/railway
 
 load_dotenv()
+url = urlparse(os.getenv("MYSQLPUBLICURL"))
 tools = Tools(
-                USER = os.getenv("MYSQLUSER"),
-                PASSWORD = os.getenv("MYSQLPASSWORD"),
-                HOST = os.getenv("MYSQLHOST"),
-                PORT = int(os.getenv("MYSQLPORT")),
-                DATABASE = os.getenv("MYSQLDATABASE")
+                USER = url.username,
+                PASSWORD = url.password,
+                HOST = url.hostname,
+                PORT = url.port,
+                DATABASE = url.path.lstrip("/")
               )
 
 @app.post("/auth/verify/init")
