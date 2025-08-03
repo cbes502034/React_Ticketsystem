@@ -5,7 +5,6 @@ import AuthPage from './pages/Auth'
 import ConcertList from './pages/ConcertList'
 import SearchPage from './pages/SearchPage'
 import Concert from './pages/Concert'
-
 //import Login from './pages/Login'
 //import Register from './pages/Register'
 
@@ -20,9 +19,6 @@ export default function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/concert/:id" element={<Concert />} />
 
-        {/*<Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/concert/:id" element={<Concert />} />*/}
       </Routes>
     </Router>
   )
