@@ -21,7 +21,7 @@ export default function HotCarousel() {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev',
         }}
-        className="mx-auto h-[700px] object-contain"
+        className="mx-auto h-[600px] object-contain"
       >
         {hotConcerts.map(concert => (
           <SwiperSlide key={concert.id}>
