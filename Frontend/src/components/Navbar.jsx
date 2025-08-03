@@ -20,7 +20,6 @@ export default function Navbar() {
 
   check()
 
-  // 當登入狀態變動時（使用 localStorage 通知）
   const handleStorageChange = () => {
     check()
   }
