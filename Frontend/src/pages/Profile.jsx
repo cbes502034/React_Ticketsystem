@@ -1,36 +1,38 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
-export default function UserProfile() {
+export default function Profile() {
   const [user, setUser] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    axios.get('https://reactticketsystem-production.up.railway.app/profile')
-      .then(res => {
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get('https://reactticketsystem-production.up.railway.app/profile', {
+          withCredentials: true 
+        })
         if (res.data.status) {
           setUser(res.data.user)
         } else {
-          alert(res.data.notify)
-          window.location.href = 'https://reactticketsystem-production.up.railway.app/Auth/Login'
+          navigate('/auth')
         }
-      })
-      .catch(err => {
-        console.error(err)
-        alert("無法取得使用者資料")
-      })
-  }, [])
+      } catch (error) {
+        console.error('取得個人資料失敗:', error)
+        navigate('/auth') 
+      }
+    }
+
+    fetchProfile()
+  }, [navigate])
 
   if (!user) return <div>載入中...</div>
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">會員資料</h2>
-      <div className="bg-white shadow-md rounded-lg p-4 space-y-2">
-        <p><strong>帳號：</strong> {user.login_id}</p>
-        <p><strong>姓名：</strong> {user.name}</p>
-        <p><strong>會員編號：</strong> {user.register_id}</p>
-        {/* 你可以加入 email / phone / address 等欄位 */}
-      </div>
+      <h1 className="text-2xl font-bold mb-4">會員資料</h1>
+      <p><strong>帳號：</strong>{user.login_id}</p>
+      <p><strong>姓名：</strong>{user.name}</p>
     </div>
   )
 }
