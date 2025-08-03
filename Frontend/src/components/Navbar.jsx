@@ -12,7 +12,7 @@ export default function Navbar() {
 
 
   useEffect(() => {
-    fetch('/check_login', { credentials: 'include' })
+    fetch('https://reactticketsystem-production.up.railway.app/check_login', { credentials: 'include' })
       .then(res => res.json())
       .then(data => setIsLoggedIn(data.logged_in || false))
       .catch(() => setIsLoggedIn(false))
