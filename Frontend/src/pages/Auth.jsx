@@ -12,7 +12,7 @@ export default function Auth() {
       <NavTabs onTabChange={setTab} />
 
       <div className="p-6">
-        {tab === 'login' && <Login />}
+        {tab === 'login' && <Login setTab={setTab} />} 
         {tab === 'register' && <Register/>}
         {tab === 'forgot' && <p>（尚未實作）</p>}
         {tab === 'update' && <p>（尚未實作）</p>}
