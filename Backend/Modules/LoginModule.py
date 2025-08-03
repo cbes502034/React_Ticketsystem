@@ -5,16 +5,16 @@ async def Check(tools,request):
             data = response["data"]
             login_idInput = data["login_id"]
             passwordInput = data["password"]
-            userData = tools.Sql(instruction="""SELECT login_id,password FROM registerlist
+            userData = tools.Sql(instruction="""SELECT login_id,password FROM register
                                                 WHERE login_id=%s AND password=%s""",
                                  SELECT=True,
                                  SET=(login_idInput,passwordInput))
             if userData:
-                name = tools.Sql(instruction="""SELECT name FROM registerlist
+                name = tools.Sql(instruction="""SELECT name FROM register
                                                 WHERE login_id=%s AND password=%s""",
                                                 SELECT=True,
                                                 SET=(login_idInput,passwordInput))[0][0]
-                ID = tools.Sql(instruction="""SELECT id FROM registerlist 
+                ID = tools.Sql(instruction="""SELECT id FROM register 
                                                 WHERE login_id=%s AND password=%s""",
                                                 SELECT=True,
                                                 SET=(login_idInput,passwordInput))[0][0]
