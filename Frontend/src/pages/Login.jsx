@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link} from 'react-router-dom'
 
-export default function Login({ setTab }) {
+export default function Login({ setTab,setIsLoggedIn }) {
   const [login_id, setLoginId] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
