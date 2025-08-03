@@ -1,58 +1,40 @@
-import { useParams, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+// src/pages/ConcertDetail.jsx
+import { useParams } from 'react-router-dom'
+import concertsData from '../data/concerts'
 
-export default function Concert() {
+export default function ConcertDetail() {
   const { id } = useParams()
-  const navigate = useNavigate()
-  const [concert, setConcert] = useState(null)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    fetch(`/get_ticket_informations?id=${id}`)
-      .then(res => {
-        if (!res.ok) throw new Error('無法取得演唱會資訊')
-        return res.json()
-      })
-      .then(data => setConcert(data))
-      .catch(err => setError(err.message))
-  }, [id])
-
-  if (error) {
-    return <div className="p-6 text-red-600">錯誤：{error}</div>
-  }
+  const concert = concertsData.find(c => c.id === parseInt(id))
 
   if (!concert) {
-    return <div className="p-6">載入中...</div>
-  }
-
-  const handleSelectTicket = (ticketType) => {
-    // 可以改成 navigate 到購票頁，或將票種帶入下一步
-    navigate(`/ticket?id=${id}&type=${encodeURIComponent(ticketType)}`)
+    return <div className="pt-24 text-center text-red-500">找不到演唱會資訊</div>
   }
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="pt-24 px-6 max-w-4xl mx-auto text-brand-text bg-[#F7F3F0] min-h-screen">
       <h1 className="text-3xl font-bold mb-4">{concert.name}</h1>
       <img
         src={concert.image_url}
         alt={concert.name}
-        className="w-full h-64 object-cover rounded mb-4"
+        className="w-full h-64 object-cover rounded-lg mb-6"
       />
-      <p className="text-gray-700 mb-2">📍 地點：{concert.location}</p>
-      <p className="text-gray-700 mb-4">📅 日期：{concert.date}</p>
 
-      <h2 className="text-2xl font-semibold mt-6 mb-2">票種選擇</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {concert.ticket_types.map((ticket, index) => (
-          <div
-            key={index}
-            className="border p-4 rounded hover:shadow cursor-pointer"
-            onClick={() => handleSelectTicket(ticket.type)}
-          >
-            <h3 className="text-lg font-bold">{ticket.type}</h3>
-            <p className="text-gray-600">價格：${ticket.price}</p>
-          </div>
-        ))}
+      <div className="space-y-2 text-[#734338]">
+        <p><strong>📅 日期：</strong>{concert.date}</p>
+        <p><strong>📍 地點：</strong>{concert.location}</p>
+        <p><strong>🎟️ 票價：</strong>{concert.price}</p>
+        <p><strong>🔖 別名：</strong>{concert.aliases?.join(', ')}</p>
+        <p><strong>📝 活動說明：</strong>{concert.description}</p>
+        <p><strong>❗ 注意事項：</strong>{concert.note}</p>
+      </div>
+
+      <div className="mt-8">
+        <a
+          href={`/tickets?concert_id=${concert.id}`}
+          className="inline-block bg-[#B19693] hover:bg-[#947A6D] text-white px-6 py-3 rounded text-lg"
+        >
+          立即購票
+        </a>
       </div>
     </div>
   )

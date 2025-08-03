@@ -14,8 +14,8 @@ export default function Auth() {
       <div className="p-6">
         {tab === 'login' && <Login />}
         {tab === 'register' && <Register/>}
-        {tab === 'forgot' && <p>這是忘記密碼畫面（尚未實作）</p>}
-        {tab === 'update' && <p>這是會員資料異動申請畫面（尚未實作）</p>}
+        {tab === 'forgot' && <p>（尚未實作）</p>}
+        {tab === 'update' && <p>（尚未實作）</p>}
       </div>
     </div>
   </div>
