@@ -12,11 +12,25 @@ export default function Navbar() {
 
 
   useEffect(() => {
-    fetch('https://reactticketsystem-production.up.railway.app/check_login', { credentials: 'include' })
-      .then(res => res.json())
-      .then(data => setIsLoggedIn(data.logged_in || false))
-      .catch(() => setIsLoggedIn(false))
-  }, [])
+  const check = async () => {
+    const res = await fetch('https://reactticketsystem-production.up.railway.app/check_login', { credentials: 'include' })
+    const data = await res.json()
+    setIsLoggedIn(data.logged_in || false)
+  }
+
+  check()
+
+  // 當登入狀態變動時（使用 localStorage 通知）
+  const handleStorageChange = () => {
+    check()
+  }
+
+  window.addEventListener('storage', handleStorageChange)
+  return () => {
+    window.removeEventListener('storage', handleStorageChange)
+  }
+}, [])
+
 
   useEffect(() => {
   const shouldLockScroll = isSearchOpen || isMenuOpen;
