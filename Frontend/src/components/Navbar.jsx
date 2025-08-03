@@ -7,15 +7,23 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+
   const navigate = useNavigate()
   const location = useLocation()
 
 
-  useEffect(() => {
+ useEffect(() => {
   const check = async () => {
-    const res = await fetch('https://reactticketsystem-production.up.railway.app/check_login', { credentials: 'include' })
-    const data = await res.json()
-    setIsLoggedIn(data.logged_in || false)
+    try {
+      const res = await fetch('https://reactticketsystem-production.up.railway.app/check_login', {
+        credentials: 'include' 
+      })
+      const data = await res.json()
+      setIsLoggedIn(data.logged_in || false)
+    } catch (err) {
+      console.error('登入檢查失敗:', err)
+      setIsLoggedIn(false)
+    }
   }
 
   check()
@@ -62,6 +70,7 @@ export default function Navbar() {
       <div className="hidden md:flex gap-8 text-[#734338] font-medium">
         <Link to="/concert-list" className="hover:text-[#947A6D]">演唱會資訊</Link>
         <Link to="/tickets" className="hover:text-[#947A6D]">最新消息</Link>
+        <Link to="/profile" className="hover:text-[#947A6D]">會員資訊</Link>
       </div>
 
       <div className="flex items-center gap-4">
