@@ -13,9 +13,10 @@ export default function Auth() {
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       
       <div className="max-w-lg mx-auto bg-white shadow rounded">
+
         <NavTabs onTabChange={setTab} />
       <div className="p-6">
-        {tab === 'login' && <Login setTab={setTab} />} 
+        {tab === 'login' && <Login setTab={setTab} setIsLoggedIn={setIsLoggedIn} />}
         {tab === 'register' && <Register/>}
         {tab === 'forgot' && <p>（尚未實作）</p>}
         {tab === 'update' && <p>（尚未實作）</p>}
