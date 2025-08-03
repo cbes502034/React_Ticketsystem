@@ -7,28 +7,16 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [userName, setUserName] = useState('')
   const navigate = useNavigate()
   const location = useLocation()
 
-  useEffect(() => {
-  fetch('/auth/user', { credentials: 'include' })
-    .then(res => res.json())
-    .then(data => {
-      if (data.status) {
-        setIsLoggedIn(true)
-        setUserName(data.UserName)  
-      } else {
-        setIsLoggedIn(false)
-        setUserName('')
-      }
-    })
-    .catch(() => {
-      setIsLoggedIn(false)
-      setUserName('')
-    })
-}, [])
 
+  useEffect(() => {
+    fetch('/check_login', { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => setIsLoggedIn(data.logged_in || false))
+      .catch(() => setIsLoggedIn(false))
+  }, [])
 
   useEffect(() => {
   const shouldLockScroll = isSearchOpen || isMenuOpen;
@@ -88,39 +76,19 @@ export default function Navbar() {
           </form>
         )}
 
-         {isLoggedIn ? (
-              <div className="relative group z-50">
-                <button className="text-sm font-semibold text-[#734338] hover:opacity-80">
-                  {userName}
-                </button>
-                <div className="absolute right-0 mt-2 hidden group-hover:block bg-white border rounded shadow">
-                  <Link
-                    to="/profile"
-                    className="block px-4 py-2 text-sm text-[#734338] hover:bg-[#D7C4BB]"
-                  >
-                    會員中心
-                  </Link>
-                  <button
-                    className="block w-full text-left px-4 py-2 text-sm text-[#734338] hover:bg-[#D7C4BB]"
-                    onClick={() => {
-                      fetch('/auth/logout', { credentials: 'include' })
-                        .then(() => {
-                          setIsLoggedIn(false)
-                          setUserName('')
-                          navigate('/')
-                        })
-                    }}
-                  >
-                    登出
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <Link to="/auth">
-                <img src={image.account} alt="Account" className="w-6 h-6 hover:opacity-80" />
-              </Link>
-            )}
-
+          {isLoggedIn ? (
+            <button onClick={async () => {
+              await fetch('/auth/logout', { credentials: 'include' })
+              setIsLoggedIn(false)
+              navigate('/auth')  // 或跳回首頁 navigate('/')
+            }}>
+              <img src={image.logout} alt="Logout" className="w-6 h-6 hover:opacity-80" />
+            </button>
+          ) : (
+            <Link to="/auth">
+              <img src={image.account} alt="Account" className="w-6 h-6 hover:opacity-80" />
+            </Link>
+          )}
 
         <button onClick={handleCartClick}>
           <img src={image.cart} alt="Cart" className="w-6 h-6 hover:opacity-80" />
