@@ -16,6 +16,18 @@ export default function Concert() {
   const month = dateObj.toLocaleDateString('en-US', { month: 'short' })
   const day = dateObj.getDate()
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+  fetch('https://reactticketsystem-production.up.railway.app/check_login', {
+    credentials: 'include'
+  })
+    .then(res => res.json())
+    .then(data => setIsLoggedIn(data.logged_in || false))
+    .catch(() => setIsLoggedIn(false))
+}, [])
+
   return (
     <div className="pt-20 bg-black text-white min-h-screen">
 
@@ -38,12 +50,18 @@ export default function Concert() {
         <h2 className="text-xl font-bold mb-4">Tickets</h2>
         <div className="bg-white text-black rounded shadow p-4 flex items-center justify-between">
           <p className="p-2 font-semibold">General Onsale</p>
-       <Link
-           to={`/ticket/${concert.id}`}
+          <button
+            onClick={() => {
+              if (isLoggedIn) {
+                navigate(`/ticket/${concert.id}`)
+              } else {
+                navigate(`/auth?redirect=/ticket/${concert.id}`)
+              }
+            }}
             className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
           >
             Buy tickets ↗
-          </Link>
+          </button>
         </div>
       </div>
 
