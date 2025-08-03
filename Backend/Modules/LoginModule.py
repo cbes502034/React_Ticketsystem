@@ -9,7 +9,7 @@ async def Check(tools, request):
             userData = tools.Sql(
                 instruction="""
                     SELECT login_id, name, id 
-                    FROM registerlist 
+                    FROM register 
                     WHERE login_id=%s AND password=%s
                 """,
                 SELECT=True,
