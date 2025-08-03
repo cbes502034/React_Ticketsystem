@@ -51,7 +51,7 @@ export default function SearchPage() {
               <img
                 src={concert.image_url}
                 alt={concert.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-60 object-contain"
               />
               <div className="p-4">
                 <h2 className="text-xl font-semibold text-brand-bg">{concert.name}</h2>
