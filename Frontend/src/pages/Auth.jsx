@@ -4,13 +4,15 @@ import Login from './Login'
 import Register from './Register'
 
 export default function Auth() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [tab, setTab] = useState('login','register')
 
   return (
   <div className="pt-20">
-    <div className="max-w-lg mx-auto bg-white shadow rounded">
-      <NavTabs onTabChange={setTab} />
-
+      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      
+      <div className="max-w-lg mx-auto bg-white shadow rounded">
+        <NavTabs onTabChange={setTab} />
       <div className="p-6">
         {tab === 'login' && <Login setTab={setTab} />} 
         {tab === 'register' && <Register/>}

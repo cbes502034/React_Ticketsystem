@@ -16,9 +16,10 @@ export default function Login({ setTab }) {
     })
 
   const data = await res.json()
-  if (data.status) {
-    alert(data.notify || "登入成功！")
-    navigate('/')   
+    if (data.status) {
+      alert(data.notify || "登入成功！")
+      setIsLoggedIn(true)       
+      navigate('/')   
   } else {
     alert(data.notify || "登入失敗")
   }
