@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import concertsData from '../data/concerts'
 import image from '../assets/image'
 
@@ -38,14 +38,12 @@ export default function Concert() {
         <h2 className="text-xl font-bold mb-4">Tickets</h2>
         <div className="bg-white text-black rounded shadow p-4 flex items-center justify-between">
           <p className="p-2 font-semibold">General Onsale</p>
-          <a
-            href={concert.ticket_link}
-            target="_blank"
-            rel="noopener noreferrer"
+       <Link
+           to={`/ticket/${concert.id}`}
             className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
           >
             Buy tickets ↗
-          </a>
+          </Link>
         </div>
       </div>
 

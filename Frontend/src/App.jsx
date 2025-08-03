@@ -5,6 +5,7 @@ import AuthPage from './pages/Auth'
 import ConcertList from './pages/ConcertList'
 import SearchPage from './pages/SearchPage'
 import Concert from './pages/Concert'
+import Ticket from './pages/Ticket'
 //import Login from './pages/Login'
 //import Register from './pages/Register'
 
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/concert-list" element={<ConcertList />} /> 
         <Route path="/search" element={<SearchPage />} />
         <Route path="/concert/:id" element={<Concert />} />
+        <Route path="/ticket/:id" element={<Ticket />} />
 
       </Routes>
     </Router>
