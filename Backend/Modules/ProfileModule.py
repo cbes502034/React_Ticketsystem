@@ -4,21 +4,22 @@ def GetProfileData(tools,request):
         return list(map(lambda _:list(_),data))
     try:
         login_id = request.session["UserID"]
-        profileColumn = ["login_id",
-                             "name",
-                           "gender",
-                         "birthday",
-                            "email",
-                     "phone_number",
-                    "mobile_number",
-                          "address"]
+        profileColumn = ["loginType",
+                          "login_id",
+                              "name",
+                            "gender",
+                          "birthday",
+                             "email",
+                      "phone_number",
+                     "mobile_number",
+                           "address"]
         
         ticketColumn = ["title",
-                        "date",
-                        "location",
-                        "area",
-                         "`row`",
-                      "`column`",]
+                         "date",
+                     "location",
+                         "area",
+                        "`row`",
+                     "`column`",]
         
         registerID = request.session["RegisterID"]
         
@@ -32,8 +33,7 @@ def GetProfileData(tools,request):
         ticketData = TupleToList(tools.Sql(
                                                 instruction=f"""SELECT {",".join(ticketColumn)} 
                                                                 FROM ticket
-                                                                INNER JOIN `event` 
-                                                                ON  `event`.id = ticket.event_id 
+                                                                INNER JOIN `event` ON  `event`.id = ticket.event_id 
                                                                 WHERE register_id = %s""",
                                                 SELECT=True,
                                                 SET=(registerID,)
