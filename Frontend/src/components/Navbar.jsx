@@ -78,9 +78,9 @@ export default function Navbar() {
 
           {isLoggedIn ? (
             <button onClick={async () => {
-              await fetch('/auth/logout', { credentials: 'include' })
+              await fetch('https://reactticketsystem-production.up.railway.app/auth/logout', { credentials: 'include' })
               setIsLoggedIn(false)
-              navigate('/auth')  // 或跳回首頁 navigate('/')
+              navigate('/Home') 
             }}>
               <img src={image.logout} alt="Logout" className="w-6 h-6 hover:opacity-80" />
             </button>
