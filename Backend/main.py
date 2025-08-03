@@ -67,7 +67,6 @@ async def get_user_profile(request: Request):
         "user": {
             "login_id": request.session["UserID"],
             "name": request.session["UserName"],
-            "register_id": request.session["RegisterID"]
         }
     }
     
