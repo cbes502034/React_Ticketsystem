@@ -1,58 +1,89 @@
-import { useParams, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import concertsData from '../data/concerts'
+import image from '../assets/image'
+
 
 export default function Concert() {
   const { id } = useParams()
-  const navigate = useNavigate()
-  const [concert, setConcert] = useState(null)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    fetch(`/get_ticket_informations?id=${id}`)
-      .then(res => {
-        if (!res.ok) throw new Error('無法取得演唱會資訊')
-        return res.json()
-      })
-      .then(data => setConcert(data))
-      .catch(err => setError(err.message))
-  }, [id])
-
-  if (error) {
-    return <div className="p-6 text-red-600">錯誤：{error}</div>
-  }
+  const concert = concertsData.find(c => c.id.toString() === id)
 
   if (!concert) {
-    return <div className="p-6">載入中...</div>
+    return <div className="p-6">找不到演唱會資訊</div>
   }
 
-  const handleSelectTicket = (ticketType) => {
-    // 可以改成 navigate 到購票頁，或將票種帶入下一步
-    navigate(`/ticket?id=${id}&type=${encodeURIComponent(ticketType)}`)
-  }
+  const dateObj = new Date(concert.date)
+  const weekday = dateObj.toLocaleDateString('en-US', { weekday: 'short' })
+  const month = dateObj.toLocaleDateString('en-US', { month: 'short' })
+  const day = dateObj.getDate()
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">{concert.name}</h1>
-      <img
-        src={concert.image_url}
-        alt={concert.name}
-        className="w-full h-64 object-cover rounded mb-4"
-      />
-      <p className="text-gray-700 mb-2">📍 地點：{concert.location}</p>
-      <p className="text-gray-700 mb-4">📅 日期：{concert.date}</p>
+    <div className="pt-20 bg-black text-white min-h-screen">
 
-      <h2 className="text-2xl font-semibold mt-6 mb-2">票種選擇</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {concert.ticket_types.map((ticket, index) => (
-          <div
-            key={index}
-            className="border p-4 rounded hover:shadow cursor-pointer"
-            onClick={() => handleSelectTicket(ticket.type)}
+    <div className=" p-9 relative">
+        <img src={concert.image_url} alt={concert.name} className="w-full h-[600px] object-contain" />
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent p-6">
+          <h1 className="text-3xl font-bold mb-2">{concert.name}</h1>
+          <p className="text-gray-200 font-semibold">{weekday}, {day} {month.toUpperCase()} {dateObj.getFullYear()}</p>
+          <p className="mt-1 flex items-center gap-x-1">
+            <img src={image.locationw} alt="location" className="w-5 h-5 " />
+            {concert.location}</p>
+          <p className="mt-1 flex items-center gap-x-1">
+            <img src={image.clock} alt="clock" className="bg-white w-5 h-5 " />
+            {concert.time}</p>
+        </div>
+      </div>
+    <div className="bg-gray-100 text-black rounded-lg shadow-md mx-6 mb-10 p-6 space-y-6">
+
+      <div className="p-6">
+        <h2 className="text-xl font-bold mb-4">Tickets</h2>
+        <div className="bg-white text-black rounded shadow p-4 flex items-center justify-between">
+          <p className="p-2 font-semibold">General Onsale</p>
+          <a
+            href={concert.ticket_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
           >
-            <h3 className="text-lg font-bold">{ticket.type}</h3>
-            <p className="text-gray-600">價格：${ticket.price}</p>
+            Buy tickets ↗
+          </a>
+        </div>
+      </div>
+
+      {concert.alt_dates?.length > 0 && (
+      <div className="p-6">
+          <h3 className="text-lg font-semibold mb-2">Alternative Dates</h3>
+          <div className="flex gap-4">
+            {concert.alt_dates.map((d, index) => {
+              const altDate = new Date(d.date)
+              return (
+                <div
+                  key={index}
+                  className="bg-white border border-gray-300 p-4 rounded-md text-center w-28 shadow"
+                >
+                  <p className="text-sm font-bold text-gray-500">{altDate.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()}</p>
+                  <p className="text-2xl font-bold text-black">{altDate.getDate()}</p>
+                  <p className="text-sm uppercase text-gray-600">{altDate.toLocaleDateString('en-US', { month: 'short' })}</p>
+                  <p className="text-xs text-gray-500 mt-1">{d.city}</p>
+                </div>
+              )
+            })}
           </div>
-        ))}
+        </div>
+      )}
+   </div>
+
+    <div className="bg-gray-300 text-black rounded-lg shadow-md mx-6 mb-10 p-6 space-y-6">
+        {concert.info?.length > 0 && (
+          <div>
+            <h3 className="text-lg font-bold mb-2">注意事項</h3>
+            <h4 className="font-semibold text-sm mb-2">票卷使用規範:</h4>
+            <ul className="list-disc list-inside text-sm space-y-1">
+              {concert.info.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   )

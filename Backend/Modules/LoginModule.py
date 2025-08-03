@@ -10,7 +10,7 @@ async def Check(tools,request):
                                  SELECT=True,
                                  SET=(login_idInput,passwordInput))
             if userData:
-                name = tools.Sql(instruction="""SELECT name FROM register 
+                name = tools.Sql(instruction="""SELECT name FROM register
                                                 WHERE login_id=%s AND password=%s""",
                                                 SELECT=True,
                                                 SET=(login_idInput,passwordInput))[0][0]
