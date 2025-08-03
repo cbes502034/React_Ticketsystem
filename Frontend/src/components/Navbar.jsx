@@ -7,22 +7,33 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [userName, setUserName] = useState('')
   const navigate = useNavigate()
   const location = useLocation()
 
-
   useEffect(() => {
-    fetch('/check_login', { credentials: 'include' })
-      .then(res => res.json())
-      .then(data => setIsLoggedIn(data.logged_in || false))
-      .catch(() => setIsLoggedIn(false))
-  }, [])//待改
+  fetch('/auth/user', { credentials: 'include' })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status) {
+        setIsLoggedIn(true)
+        setUserName(data.UserName)  
+      } else {
+        setIsLoggedIn(false)
+        setUserName('')
+      }
+    })
+    .catch(() => {
+      setIsLoggedIn(false)
+      setUserName('')
+    })
+}, [])
+
 
   useEffect(() => {
   const shouldLockScroll = isSearchOpen || isMenuOpen;
   document.body.style.overflow = shouldLockScroll ? 'hidden' : 'auto';
 
-  // 在組件卸載時還原 scroll 狀態
   return () => {
     document.body.style.overflow = 'auto';
   };
@@ -45,19 +56,15 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#D7C4BB] px-6 py-3 flex justify-between items-center shadow">
-      {/* 左側 Logo 與標題 */}
       <Link to="/" className="px-8 text-xl font-bold text-[#734338]">Live Band</Link>
 
-      {/* 中間連結（桌機顯示） */}
       <div className="hidden md:flex gap-8 text-[#734338] font-medium">
         <Link to="/concert-list" className="hover:text-[#947A6D]">演唱會資訊</Link>
         <Link to="/tickets" className="hover:text-[#947A6D]">最新消息</Link>
       </div>
 
-      {/* 右側圖示按鈕 */}
       <div className="flex items-center gap-4">
 
-        {/* 搜尋欄 */}
         {!/^\/auth/.test(location.pathname) && location.pathname !== '/shopping-cart' && (
 
           <form
@@ -81,13 +88,44 @@ export default function Navbar() {
           </form>
         )}
 
-        <Link to={isLoggedIn ? "/profile" : "/auth"}>
-          <img src={image.account} alt="Account" className="w-6 h-6 hover:opacity-80" />
-        </Link>
+         {isLoggedIn ? (
+              <div className="relative group z-50">
+                <button className="text-sm font-semibold text-[#734338] hover:opacity-80">
+                  {userName}
+                </button>
+                <div className="absolute right-0 mt-2 hidden group-hover:block bg-white border rounded shadow">
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-[#734338] hover:bg-[#D7C4BB]"
+                  >
+                    會員中心
+                  </Link>
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-[#734338] hover:bg-[#D7C4BB]"
+                    onClick={() => {
+                      fetch('/auth/logout', { credentials: 'include' })
+                        .then(() => {
+                          setIsLoggedIn(false)
+                          setUserName('')
+                          navigate('/')
+                        })
+                    }}
+                  >
+                    登出
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <Link to="/auth">
+                <img src={image.account} alt="Account" className="w-6 h-6 hover:opacity-80" />
+              </Link>
+            )}
+
+
         <button onClick={handleCartClick}>
           <img src={image.cart} alt="Cart" className="w-6 h-6 hover:opacity-80" />
         </button>   
-        {/* 手機搜尋欄 */}
+
         {!/^\/auth/.test(location.pathname) && location.pathname !== '/shopping-cart' && (
 
           <button className="md:hidden" onClick={() => {setIsSearchOpen(!isSearchOpen); setIsMenuOpen(false);}}>
@@ -130,7 +168,6 @@ export default function Navbar() {
               </div>
             )}
 
-        {/* 手機收合選單按鈕 */}
         <button className="md:hidden" 
                 onClick={() => {
                   setIsMenuOpen(!isMenuOpen) 
@@ -139,7 +176,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* 手機選單 */}
       {isMenuOpen && (
         <div className="fixed inset-0 top-[50px] z-50 bg-white p-6 md:hidden overflow-y-auto">
           <div className="space-y-4">
