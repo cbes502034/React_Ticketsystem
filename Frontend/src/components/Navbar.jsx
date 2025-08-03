@@ -163,6 +163,7 @@ export default function Navbar() {
 
             <Link to="/concert-list" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">演唱會資訊</Link>
             <Link to="/ticket-info" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">最新消息</Link>
+            <Link to="/profile" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">會員資訊</Link>
 
           </div>
         </div>

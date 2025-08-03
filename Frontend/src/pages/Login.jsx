@@ -19,7 +19,7 @@ export default function Login({ setTab,setIsLoggedIn }) {
     if (data.status) {
       alert(data.notify || "登入成功！")
       setIsLoggedIn(true)       
-      navigate('/')   
+      window.location.href = '/'
   } else {
     alert(data.notify || "登入失敗")
   }
