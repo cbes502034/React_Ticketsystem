@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import concertsData from '../data/concerts'
 import image from '../assets/image'
 
