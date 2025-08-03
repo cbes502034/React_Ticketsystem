@@ -8,7 +8,6 @@ import Concert from './pages/Concert'
 
 //import Login from './pages/Login'
 //import Register from './pages/Register'
-import Concert from './pages/Concert'
 
 export default function App() {
   return (
