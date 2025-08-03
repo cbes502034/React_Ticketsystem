@@ -38,6 +38,20 @@ async def Login(request:Request):
     response = await LoginModule.Check(tools=tools,request=request)
     return JSONResponse(response)
 
+@app.get("/check_login")
+async def check_login(request: Request):
+    if "UserID" in request.session:
+        return JSONResponse({
+            "logged_in": True,
+            "UserID": request.session["UserID"],
+            "UserName": request.session["UserName"],
+            "RegisterID": request.session["RegisterID"]
+        })
+    else:
+        return JSONResponse({
+            "logged_in": False
+        })
+
 @app.get("/auth/logout")
 async def Logout(request:Request):
     response = await LogoutModule.Logout(request = request)
