@@ -80,7 +80,7 @@ export default function Navbar() {
             <button onClick={async () => {
               await fetch('https://reactticketsystem-production.up.railway.app/auth/logout', { credentials: 'include' })
               setIsLoggedIn(false)
-              navigate('/Home') 
+              navigate('/') 
             }}>
               <img src={image.logout} alt="Logout" className="w-6 h-6 hover:opacity-80" />
             </button>
