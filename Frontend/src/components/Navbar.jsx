@@ -34,29 +34,31 @@ export default function Navbar() {
 
   const handleCartClick = () => {
     setIsSearchOpen(false)
-    if (isLoggedIn) {
-      navigate('/shopping-cart')
-    } else {
-      navigate('/auth')
-    }
+    setIsMenuOpen(false)
+    navigate('/shopping-cart')
+   // if (isLoggedIn) {
+     // navigate('/shopping-cart')
+   // } else {
+    //  navigate('/auth')
+   // }
   }  
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#D7C4BB] px-6 py-3 flex justify-between items-center shadow">
       {/* 左側 Logo 與標題 */}
-      <Link to="/" className="text-xl font-bold text-[#734338]">演唱會系統</Link>
+      <Link to="/" className="px-8 text-xl font-bold text-[#734338]">Live Band</Link>
 
       {/* 中間連結（桌機顯示） */}
-      <div className="hidden md:flex gap-6 text-[#734338] font-medium">
-        <Link to="/concerts" className="hover:text-[#947A6D]">演唱會資訊</Link>
-        <Link to="/tickets" className="hover:text-[#947A6D]">購票資訊</Link>
+      <div className="hidden md:flex gap-8 text-[#734338] font-medium">
+        <Link to="/concert-list" className="hover:text-[#947A6D]">演唱會資訊</Link>
+        <Link to="/tickets" className="hover:text-[#947A6D]">最新消息</Link>
       </div>
 
       {/* 右側圖示按鈕 */}
       <div className="flex items-center gap-4">
 
         {/* 搜尋欄 */}
-        {location.pathname === '/' && (
+        {!/^\/auth/.test(location.pathname) && location.pathname !== '/shopping-cart' && (
 
           <form
             onSubmit={(e) => {
@@ -86,7 +88,7 @@ export default function Navbar() {
           <img src={image.cart} alt="Cart" className="w-6 h-6 hover:opacity-80" />
         </button>   
         {/* 手機搜尋欄 */}
-        {location.pathname === '/' && (
+        {!/^\/auth/.test(location.pathname) && location.pathname !== '/shopping-cart' && (
 
           <button className="md:hidden" onClick={() => {setIsSearchOpen(!isSearchOpen); setIsMenuOpen(false);}}>
             <img src={image.search} alt="search" className="w-5 h-5" />
@@ -142,8 +144,8 @@ export default function Navbar() {
         <div className="fixed inset-0 top-[50px] z-50 bg-white p-6 md:hidden overflow-y-auto">
           <div className="space-y-4">
 
-            <Link to="/concerts" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">演唱會資訊</Link>
-            <Link to="/tickets" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">購票資訊</Link>
+            <Link to="/concert-list" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">演唱會資訊</Link>
+            <Link to="/ticket-info" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">最新消息</Link>
 
           </div>
         </div>
