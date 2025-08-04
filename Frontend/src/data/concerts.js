@@ -9,9 +9,9 @@ import GreenDay from '../assets/Green_day.jpg'
 import DaftPunk from '../assets/Daft_Punk.jpg'
 import Lee from '../assets/Lee.jpeg'
 
-const concertsData = [
+const concerts = [
   {
-    "id": 1,
+    "event_id": 1,
     "name": "Radiohead World Tour 2025",
     "date": "2025-10-12",
     "time": "6:00 PM",
@@ -31,7 +31,7 @@ const concertsData = [
 
   },
   {
-    "id": 2,
+    "event_id": 2,
     "name": "Coldplay Music of the Spheres Live",
     "date": "2025-11-05",
     "time": "4:00 PM",
@@ -51,13 +51,12 @@ const concertsData = [
     "note": "請提前30分鐘入場，嚴禁攜帶外食..."
   },
   {
-    "id": 3,
+    "event_id": 3,
     "name": "David Bowie Tribute Concert",
     "date": "2025-08-30",
     "time": "7:00 PM",
     "location": "高雄流行音樂中心",
     "location-id":"Kaohsiung",
-    "location-idtw":"高雄",
     "aliases": ["david bowie", "大衛鮑伊", "大衛鮑威", "戴維鮑伊", "d. bowie", "david b."],
     "image_url": Bowie,
      alt_dates: [
@@ -72,13 +71,12 @@ const concertsData = [
 
   },
   {
-    "id": 4,
+    "event_id": 4,
     "name": "Lady Gaga Chromatica Ball",
     "date": "2025-09-21",
     "time": "8:00 PM",
     "location": "台北大巨蛋",
     "location-id":"Taipei",
-    "location-idtw":"台北",
     "aliases": ["lady gaga", "雷迪嘎嘎", "女神卡卡", "嘎嘎", "嘎嘎小姐", "gaga", "lady g."],
     "image_url": GAGA,
     alt_dates: [
@@ -93,13 +91,12 @@ const concertsData = [
 
   },
   {
-    "id": 5,
+    "event_id": 5,
     "name": "Linkin Park Legacy Tour",
     "date": "2025-12-01",
     "time": "7:30 PM",
     "location": "林口體育館",
     "location-id":"New Taipei",
-    "location-idtw":"新北",
     "aliases": ["linkin park", "林肯公園", "林金帕克", "linken park", "linking park"],
     "image_url": LinkinPark,
      alt_dates: [
@@ -113,13 +110,12 @@ const concertsData = [
     "price": "NT$ 2800 ~ NT$ 6800",
   },
   {
-    "id": 6,
+    "event_id": 6,
     "name": "YOASOBI Asia Tour 2025",
     "date": "2025-10-18",
     "time": "3:00 PM",
     "location": "台北小巨蛋",
     "location-id":"Taipei",
-    "location-idtw":"台北",
     "aliases": ["yoasobi", "夜遊", "夜遊bi", "ヨアソビ", "YOA SOBI", "yoa sobi"],
     "image_url": YOASOBI,
     alt_dates: [
@@ -133,13 +129,12 @@ const concertsData = [
   "price": "NT$ 2800 ~ NT$ 6800",
   },
   {
-    "id": 7,
+    "event_id": 7,
     "name": "Chappell Roan: The Rise and Fall Tour",
     "date": "2025-11-20",
     "time": "6:30 PM",
     "location": "Legacy Taipei",
     "location-id":"Taipei",
-    "location-idtw":"台北",
     "aliases": ["chappell roan", "chapel roan", "chappel roan", "夏普羅安", "夏佩兒羅安"],
     "image_url": Chappell,
     alt_dates: [
@@ -153,7 +148,7 @@ const concertsData = [
   "price": "NT$ 2800 ~ NT$ 6800",
   },
   {
-    "id": 8,
+    "event_id": 8,
     "name": "Green Day - The American Idiot Revival",
     "date": "2025-09-09",
     "time": "6:00 PM",
@@ -171,14 +166,13 @@ const concertsData = [
     "price": "NT$ 2800 ~ NT$ 6800",
   },
   {
-    "id": 9,
+    "ievent_id": 9,
     "name": "Daft Punk Reunion DJ Night",
     "date": "2025-08-25",
     "time": "10:00 PM",
     "location": "台北信義 Warehouse",
     "aliases": ["chappell roan", "chapel roan", "chappel roan", "夏普羅安", "夏佩兒羅安"],
     "location-id":"Taipei",
-    "location-idtw":"台北",
     "aliases": ["daft punk", "達夫龐克", "傻瓜龐克", "打夫龐克", "達夫朋克", "daftpunk"],
     "image_url": DaftPunk,
      alt_dates: [
@@ -192,13 +186,12 @@ const concertsData = [
     "price": "NT$ 2800 ~ NT$ 6800",
   },
   {
-    "id": 10,
+    "event_id": 10,
     "name": "李竺芯 水噹噹",
     "date": "2025-10-28",
     "time": "7:30 PM",
     "location": "台北大巨蛋",
     "location-id":"Taipei",
-    "location-idtw":"台北",
     "image_url": Lee,
     alt_dates: [
     { date: "2025-10-28", city: "台北大巨蛋" }
@@ -211,4 +204,4 @@ const concertsData = [
     "price": "NT$ 2800 ~ NT$ 6800",
   }
 ]
-export default concertsData
+export default concerts
