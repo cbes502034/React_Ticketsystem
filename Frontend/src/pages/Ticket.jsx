@@ -40,7 +40,8 @@ export default function Ticket() {
         const res = await fetch('https://reactticketsystem-production.up.railway.app/ticket/availability', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ data: { title } })
+          body: JSON.stringify({ data: { title } }),
+          credentials: 'include'
         })
         if (!res.ok) {
           const txt = await res.text()
