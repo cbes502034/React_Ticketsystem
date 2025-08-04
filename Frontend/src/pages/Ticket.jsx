@@ -12,13 +12,13 @@ const areaMap = {
 }
 
 const seatConfig = [
-  { id: 'rock-left', rows: 5, cols: 10 },
-  { id: 'rock-center', rows: 5, cols: 20},
-  { id: 'rock-right', rows: 5, cols: 10},
+  { id: 'rock-left', rows: 5, cols: 10, className: 'bg-red-500' },
+  { id: 'rock-center', rows: 5, cols: 20, className: 'bg-red-500' },
+  { id: 'rock-right', rows: 5, cols: 10, className: 'bg-red-500' },
   { id: 'b-area', rows: 20, cols: 10, className: 'bg-orange-400' },
   { id: 'a-area', rows: 20, cols: 20, className: 'bg-yellow-300' },
-  { id: 'c-area', rows: 20, cols: 10, className: 'bg-orange-400' },
-  { id: 'd-area', rows: 10, cols: 20, className: 'bg-pink-300' }
+  { id: 'c-area', rows: 20, cols: 10, className: 'bg-pink-300' },  
+  { id: 'd-area', rows: 10, cols: 20, className: 'bg-purple-300' }
 ]
 
 export default function Ticket() {
@@ -36,14 +36,23 @@ export default function Ticket() {
     setEventTitle(title)
 
     const fetchSeats = async () => {
-      const res = await fetch('https://reactticketsystem-production.up.railway.app/ticket/availability', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title })
-      })
-      const data = await res.json()
-      setEventID(data.event_id)
-      setPurchased(data.purchased || [])
+      try {
+        const res = await fetch('https://reactticketsystem-production.up.railway.app/ticket/availability', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: { title } })
+        })
+        if (!res.ok) {
+          const txt = await res.text()
+          console.error('Availability Error:', res.status, txt)
+          return
+        }
+        const json = await res.json()
+        setEventID(json.event_id)
+        setPurchased(json.purchased || [])
+      } catch (err) {
+        console.error('Fetch availability failed', err)
+      }
     }
 
     fetchSeats()
@@ -70,78 +79,80 @@ export default function Ticket() {
 
     const res = await fetch('https://reactticketsystem-production.up.railway.app/ticket', {
       method: 'POST',
-      body: JSON.stringify(payload)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: payload })
     })
     const data = await res.json()
 
     if (data.status) {
       alert('購票成功')
       setShowVerify(false)
+      setShowConfirm(false)
     } else {
       alert(data.notify)
     }
   }
 
-  const isDisabled = (area, row, col) => {
-    return purchased.some(
+  const isDisabled = (area, row, col) =>
+    purchased.some(
       ([dbArea, dbRow, dbCol]) =>
         dbArea === areaMap[area] && dbRow === row && dbCol === col
     )
-  }
 
-  const renderSection = (id) => {
-    const config = seatConfig.find((s) => s.id === id)
-    if (!config) return null
-
-    return (
-      <div key={id} className="flex flex-col gap-[2px]">
-        {[...Array(config.rows)].map((_, rowIdx) => (
-          <div key={rowIdx} className="flex justify-center gap-[2px]">
-            {[...Array(config.cols)].map((_, colIdx) => {
-              const row = rowIdx + 1
-              const col = colIdx + 1
-              const isUsed = isDisabled(id, row, col)
-              const isSel =
-                selected &&
-                selected.area === id &&
-                selected.row === row &&
-                selected.col === col
-              return (
-                <button
-                  key={colIdx}
-                  disabled={isUsed}
-                  onClick={() => handleSelect({ area: id, row, col, disabled: isUsed })}
-                  className={`w-6 h-6 rounded p-0 m-[1px] flex items-center justify-center
-                    ${isUsed ? 'bg-red-500 cursor-not-allowed' : isSel ? 'bg-blue-600' : 'bg-gray-200 hover:bg-blue-100 active:bg-blue-300'}`}
-                >
-                  <img src={image.chair} alt="chair" className="w-4 h-4" />
-                </button>
-              )
-            })}
-          </div>
-        ))}
-      </div>
-    )
-  }
+  const renderSection = ({ id, rows, cols, className }) => (
+    <div key={id} className="flex flex-col gap-[2px]">
+      {[...Array(rows)].map((_, r) => (
+        <div key={r} className="flex justify-center gap-[2px]">
+          {[...Array(cols)].map((_, c) => {
+            const row = r + 1
+            const col = c + 1
+            const used = isDisabled(id, row, col)
+            const sel =
+              selected &&
+              selected.area === id &&
+              selected.row === row &&
+              selected.col === col
+            return (
+              <button
+                key={c}
+                disabled={used}
+                onClick={() => handleSelect({ area: id, row, col, disabled: used })}
+                className={`
+                  w-6 h-6 p-0 m-[1px] flex items-center justify-center rounded
+                  ${used
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : sel
+                      ? 'bg-blue-600 text-white'
+                      : `${className} hover:opacity-80 active:scale-95`}
+                `}
+              >
+                <img src={image.chair} alt="chair" className="w-4 h-4" />
+              </button>
+            )
+          })}
+        </div>
+      ))}
+    </div>
+  )
 
   return (
     <div className="mt-20 p-6 text-center">
       <h1 className="text-3xl font-bold mb-4">{eventTitle}</h1>
-      <div className="bg-black text-white w-[760px] mx-auto py-2 font-bold mb-6">- - - - - - - -</div>
+      <div className="bg-black text-white w-[760px] mx-auto py-2 font-bold mb-6">-----------------</div>
 
       {/* 上層：搖滾區 */}
-      <div className="flex justify-center gap-8 mb-2 bg-red-500">
-        {['rock-left', 'rock-center', 'rock-right'].map((id) => renderSection(id))}
+      <div className="flex justify-center gap-8 mb-2">
+        {seatConfig.slice(0, 3).map(renderSection)}
       </div>
 
       {/* 中層：B A C 區 */}
-      <div className="flex justify-center gap-8 mb-2 bg-orange-400">
-        {['b-area', 'a-area', 'c-area'].map((id) => renderSection(id))}
+      <div className="flex justify-center gap-8 mb-2">
+        {seatConfig.slice(3, 6).map(renderSection)}
       </div>
 
-      {/* 下層：D 區置中 */}
-      <div className="flex justify-center bg-yellow-300 bg-contain">
-        {renderSection('d-area')}
+      {/* 下層：D 區 */}
+      <div className="flex justify-center mb-4">
+        {renderSection(seatConfig[6])}
       </div>
 
       <p className="mt-4 font-semibold text-red-600">
@@ -157,58 +168,53 @@ export default function Ticket() {
         確定
       </button>
 
+      {/* 確認 Dialog */}
       {showConfirm && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/50">
-          <div className="bg-white p-6 rounded shadow">
-            <p className="font-bold">請確認您的訂票內容：</p>
-            <table className="my-4 text-left">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+          <div className="bg-white p-6 rounded shadow text-left">
+            <p className="font-bold mb-4">請確認您的訂票內容：</p>
+            <table className="mb-4">
               <tbody>
-                <tr>
-                  <td className="pr-2">演唱會場次：</td>
-                  <td>{eventTitle}</td>
-                </tr>
-                <tr>
-                  <td className="pr-2">區域：</td>
-                  <td>{areaMap[selected.area]}</td>
-                </tr>
-                <tr>
-                  <td className="pr-2">位置：</td>
-                  <td>{selected.row}排{selected.col}位</td>
-                </tr>
+                <tr><td className="pr-2">場次：</td><td>{eventTitle}</td></tr>
+                <tr><td className="pr-2">區域：</td><td>{areaMap[selected.area]}</td></tr>
+                <tr><td className="pr-2">位置：</td><td>{selected.row}排{selected.col}位</td></tr>
               </tbody>
             </table>
-            <button
-              onClick={() => setShowVerify(true)}
-              className="bg-green-600 text-white px-4 py-2 rounded mr-2"
-            >
-              確定
-            </button>
-            <button
-              onClick={() => setShowConfirm(false)}
-              className="bg-red-500 text-white px-4 py-2 rounded"
-            >
-              取消
-            </button>
+            <div className="text-right">
+              <button
+                onClick={() => { setShowConfirm(false); setShowVerify(true) }}
+                className="bg-green-600 text-white px-4 py-2 rounded mr-2"
+              >
+                確定
+              </button>
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="bg-red-500 text-white px-4 py-2 rounded"
+              >
+                取消
+              </button>
+            </div>
           </div>
         </div>
       )}
 
+      {/* 驗證碼 Dialog */}
       {showVerify && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
           <div className="bg-white p-6 rounded shadow text-center">
             <p className="font-bold mb-2">請輸入驗證碼：</p>
             <input
               type="text"
               value={verifyCode}
-              onChange={(e) => setVerifyCode(e.target.value)}
-              className="border p-2 rounded w-48"
+              onChange={e => setVerifyCode(e.target.value)}
+              className="border p-2 rounded w-48 mb-4"
             />
-            <div className="mt-4">
+            <div>
               <button
                 onClick={confirmSubmit}
                 className="bg-blue-600 text-white px-4 py-2 rounded mr-2"
               >
-                確認送出
+                送出
               </button>
               <button
                 onClick={() => setShowVerify(false)}
