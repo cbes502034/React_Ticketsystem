@@ -48,7 +48,7 @@ export default function Concert() {
     localStorage.setItem('cart', JSON.stringify(existing));
 
     // 4. 提示並導頁
-    alert(`已將「${concert.name}」 ${selectedDate} 場次加入購物車`);
+    alert(`已將「${concert.name}」 ${selectedDate} 場次加入收藏`);
     navigate('/shoppingcart');
   }
 
@@ -83,7 +83,7 @@ export default function Concert() {
           onClick={handleAddToCart}
           className="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-blue-700"
         >
-          加入購物車
+          加入收藏
         </button>
       </div>
 
