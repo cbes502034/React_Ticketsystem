@@ -55,9 +55,9 @@ export default function Navbar() {
   const handleCartClick = () => {
     setIsSearchOpen(false)
     setIsMenuOpen(false)
-    navigate('/shopping-cart')
+    navigate('/shoppingcart')
    // if (isLoggedIn) {
-     // navigate('/shopping-cart')
+     // navigate('/shoppingcart')
    // } else {
     //  navigate('/auth')
    // }
@@ -75,7 +75,7 @@ export default function Navbar() {
 
       <div className="flex items-center gap-4">
 
-        {!/^\/auth/.test(location.pathname) && location.pathname !== '/shopping-cart' && (
+        {!/^\/auth/.test(location.pathname) && location.pathname !== '/shoppingcart' && (
 
           <form
             onSubmit={(e) => {
@@ -116,7 +116,7 @@ export default function Navbar() {
           <img src={image.cart} alt="Cart" className="w-6 h-6 hover:opacity-80" />
         </button>   
 
-        {!/^\/auth/.test(location.pathname) && location.pathname !== '/shopping-cart' && (
+        {!/^\/auth/.test(location.pathname) && location.pathname !== '/shoppingcart' && (
 
           <button className="md:hidden" onClick={() => {setIsSearchOpen(!isSearchOpen); setIsMenuOpen(false);}}>
             <img src={image.search} alt="search" className="w-5 h-5" />
