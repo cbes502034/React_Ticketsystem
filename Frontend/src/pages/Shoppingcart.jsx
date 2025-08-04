@@ -29,10 +29,10 @@ export default function ShoppingCart() {
 
   return (
     <div className="pt-20 px-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-semibold mb-6">購物車</h1>
+      <h1 className="text-3xl font-semibold mb-6">演唱會收藏</h1>
 
       {cartItems.length === 0 ? (
-        <div className="text-gray-600">你的購物車是空的。</div>
+        <div className="text-gray-600">你的演唱會收藏是空的。</div>
       ) : (
         <div className="space-y-6">
           {cartItems.map((item, idx) => (
