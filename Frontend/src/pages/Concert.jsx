@@ -78,7 +78,7 @@ export default function Concert() {
       </div>
 
       {/* 加入購物車按鈕 */}
-      <div className="bg-gray-100 text-black rounded-lg shadow-md mx-6 mb-10 p-6">
+      <div className=" text-black rounded-lg shadow-md mx-6 p-6">
         <button
           onClick={handleAddToCart}
           className="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-blue-700"
@@ -105,19 +105,43 @@ export default function Concert() {
             Buy tickets ↗
           </button>
         </div>
-      </div>
-
-      {/* 注意事項 or 其他區塊 */}
-      {concert.info?.length > 0 && (
-        <div className="bg-gray-300 text-black rounded-lg shadow-md mx-6 mb-10 p-6">
-          <h3 className="text-lg font-bold mb-2">注意事項</h3>
-          <ul className="list-disc list-inside text-sm space-y-1">
-            {concert.info.map((item, idx) => (
-              <li key={idx}>{item}</li>
-            ))}
-          </ul>
+         {concert.alt_dates?.length > 0 && (
+      <div className="p-6">
+          <h3 className="text-lg font-semibold mb-2">Alternative Dates</h3>
+          <div className="flex gap-4">
+            {concert.alt_dates.map((d, index) => {
+              const altDate = new Date(d.date)
+              return (
+                <div
+                  key={index}
+                  className="bg-white border border-gray-300 p-4 rounded-md text-center w-28 shadow"
+                >
+                  <p className="text-sm font-bold text-gray-500">{altDate.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()}</p>
+                  <p className="text-2xl font-bold text-black">{altDate.getDate()}</p>
+                  <p className="text-sm uppercase text-gray-600">{altDate.toLocaleDateString('en-US', { month: 'short' })}</p>
+                  <p className="text-xs text-gray-500 mt-1">{d.city}</p>
+                </div>
+              )
+            })}
+          </div>
         </div>
       )}
-    </div>
+      </div>
+  
+
+    <div className="bg-gray-300 text-black rounded-lg shadow-md mx-6 mb-10 p-6 space-y-6">
+        {concert.info?.length > 0 && (
+          <div>
+            <h3 className="text-lg font-bold mb-2">注意事項</h3>
+            <h4 className="font-semibold text-sm mb-2">票卷使用規範:</h4>
+            <ul className="list-disc list-inside text-sm space-y-1">
+              {concert.info.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+     </div> 
   );
 }
