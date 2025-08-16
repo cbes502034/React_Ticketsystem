@@ -7,6 +7,8 @@ import search from './search-symbol.png';
 import clock from './clock.png';
 import location from './location.png';
 import locationw from './locationw.png';
+import logout from './logout.png';
+import chair from './armchair.png';
 
 export default {
   account,
@@ -15,5 +17,7 @@ export default {
   search,
   clock,
   location,
-  locationw
+  locationw,
+  logout,
+  chair
 }

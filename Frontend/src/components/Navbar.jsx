@@ -7,22 +7,42 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+
   const navigate = useNavigate()
   const location = useLocation()
 
 
-  useEffect(() => {
-    fetch('/check_login', { credentials: 'include' })
-      .then(res => res.json())
-      .then(data => setIsLoggedIn(data.logged_in || false))
-      .catch(() => setIsLoggedIn(false))
-  }, [])//待改
+ useEffect(() => {
+  const check = async () => {
+    try {
+      const res = await fetch('https://reactticketsystem-production.up.railway.app/check_login', {
+        credentials: 'include' 
+      })
+      const data = await res.json()
+      setIsLoggedIn(data.logged_in || false)
+    } catch (err) {
+      console.error('登入檢查失敗:', err)
+      setIsLoggedIn(false)
+    }
+  }
+
+  check()
+
+  const handleStorageChange = () => {
+    check()
+  }
+
+  window.addEventListener('storage', handleStorageChange)
+  return () => {
+    window.removeEventListener('storage', handleStorageChange)
+  }
+}, [])
+
 
   useEffect(() => {
   const shouldLockScroll = isSearchOpen || isMenuOpen;
   document.body.style.overflow = shouldLockScroll ? 'hidden' : 'auto';
 
-  // 在組件卸載時還原 scroll 狀態
   return () => {
     document.body.style.overflow = 'auto';
   };
@@ -35,9 +55,9 @@ export default function Navbar() {
   const handleCartClick = () => {
     setIsSearchOpen(false)
     setIsMenuOpen(false)
-    navigate('/shopping-cart')
+    navigate('/shoppingcart')
    // if (isLoggedIn) {
-     // navigate('/shopping-cart')
+     // navigate('/shoppingcart')
    // } else {
     //  navigate('/auth')
    // }
@@ -45,20 +65,17 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#D7C4BB] px-6 py-3 flex justify-between items-center shadow">
-      {/* 左側 Logo 與標題 */}
       <Link to="/" className="px-8 text-xl font-bold text-[#734338]">Live Band</Link>
 
-      {/* 中間連結（桌機顯示） */}
       <div className="hidden md:flex gap-8 text-[#734338] font-medium">
         <Link to="/concert-list" className="hover:text-[#947A6D]">演唱會資訊</Link>
         <Link to="/tickets" className="hover:text-[#947A6D]">最新消息</Link>
+        <Link to="/profile" className="hover:text-[#947A6D]">會員資訊</Link>
       </div>
 
-      {/* 右側圖示按鈕 */}
       <div className="flex items-center gap-4">
 
-        {/* 搜尋欄 */}
-        {!/^\/auth/.test(location.pathname) && location.pathname !== '/shopping-cart' && (
+        {!/^\/auth/.test(location.pathname) && location.pathname !== '/shoppingcart' && (
 
           <form
             onSubmit={(e) => {
@@ -81,14 +98,25 @@ export default function Navbar() {
           </form>
         )}
 
-        <Link to={isLoggedIn ? "/profile" : "/auth"}>
-          <img src={image.account} alt="Account" className="w-6 h-6 hover:opacity-80" />
-        </Link>
+          {isLoggedIn ? (
+            <button onClick={async () => {
+              await fetch('https://reactticketsystem-production.up.railway.app/auth/logout', { credentials: 'include' })
+              setIsLoggedIn(false)
+              navigate('/') 
+            }}>
+              <img src={image.logout} alt="Logout" className="w-6 h-6 hover:opacity-80" />
+            </button>
+          ) : (
+            <Link to="/auth">
+              <img src={image.account} alt="Account" className="w-6 h-6 hover:opacity-80" />
+            </Link>
+          )}
+
         <button onClick={handleCartClick}>
           <img src={image.cart} alt="Cart" className="w-6 h-6 hover:opacity-80" />
         </button>   
-        {/* 手機搜尋欄 */}
-        {!/^\/auth/.test(location.pathname) && location.pathname !== '/shopping-cart' && (
+
+        {!/^\/auth/.test(location.pathname) && location.pathname !== '/shoppingcart' && (
 
           <button className="md:hidden" onClick={() => {setIsSearchOpen(!isSearchOpen); setIsMenuOpen(false);}}>
             <img src={image.search} alt="search" className="w-5 h-5" />
@@ -130,7 +158,6 @@ export default function Navbar() {
               </div>
             )}
 
-        {/* 手機收合選單按鈕 */}
         <button className="md:hidden" 
                 onClick={() => {
                   setIsMenuOpen(!isMenuOpen) 
@@ -139,13 +166,13 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* 手機選單 */}
       {isMenuOpen && (
         <div className="fixed inset-0 top-[50px] z-50 bg-white p-6 md:hidden overflow-y-auto">
           <div className="space-y-4">
 
             <Link to="/concert-list" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">演唱會資訊</Link>
             <Link to="/ticket-info" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">最新消息</Link>
+            <Link to="/profile" className="block px-4 py-2 text-[#734338] hover:bg-[#D7C4BB]">會員資訊</Link>
 
           </div>
         </div>

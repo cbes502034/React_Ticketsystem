@@ -9,7 +9,7 @@ import GreenDay from '../assets/Green_day.jpg'
 import DaftPunk from '../assets/Daft_Punk.jpg'
 import Lee from '../assets/Lee.jpeg'
 
-const concertsData = [
+const concerts = [
   {
     "id": 1,
     "name": "Radiohead World Tour 2025",
@@ -25,7 +25,10 @@ const concertsData = [
     "票券不得用於商業用途，如比賽、抽獎等。",
     "若違反規定，票券可能作廢且不退款。",
     "主辦單位不對票券轉讓所造成的損失負責。"
-  ]
+  ],
+   "price": "NT$ 2800 ~ NT$ 6800",
+
+
   },
   {
     "id": 2,
@@ -54,7 +57,6 @@ const concertsData = [
     "time": "7:00 PM",
     "location": "高雄流行音樂中心",
     "location-id":"Kaohsiung",
-    "location-idtw":"高雄",
     "aliases": ["david bowie", "大衛鮑伊", "大衛鮑威", "戴維鮑伊", "d. bowie", "david b."],
     "image_url": Bowie,
      alt_dates: [
@@ -64,7 +66,9 @@ const concertsData = [
     "票券不得用於商業用途，如比賽、抽獎等。",
     "若違反規定，票券可能作廢且不退款。",
     "主辦單位不對票券轉讓所造成的損失負責。"
-  ]
+  ],
+    "price": "NT$ 2800 ~ NT$ 6800",
+
   },
   {
     "id": 4,
@@ -73,7 +77,6 @@ const concertsData = [
     "time": "8:00 PM",
     "location": "台北大巨蛋",
     "location-id":"Taipei",
-    "location-idtw":"台北",
     "aliases": ["lady gaga", "雷迪嘎嘎", "女神卡卡", "嘎嘎", "嘎嘎小姐", "gaga", "lady g."],
     "image_url": GAGA,
     alt_dates: [
@@ -84,6 +87,8 @@ const concertsData = [
     "若違反規定，票券可能作廢且不退款。",
     "主辦單位不對票券轉讓所造成的損失負責。"
   ],
+    "price": "NT$ 2800 ~ NT$ 6800",
+
   },
   {
     "id": 5,
@@ -92,7 +97,6 @@ const concertsData = [
     "time": "7:30 PM",
     "location": "林口體育館",
     "location-id":"New Taipei",
-    "location-idtw":"新北",
     "aliases": ["linkin park", "林肯公園", "林金帕克", "linken park", "linking park"],
     "image_url": LinkinPark,
      alt_dates: [
@@ -103,6 +107,7 @@ const concertsData = [
     "若違反規定，票券可能作廢且不退款。",
     "主辦單位不對票券轉讓所造成的損失負責。"
   ],
+    "price": "NT$ 2800 ~ NT$ 6800",
   },
   {
     "id": 6,
@@ -111,7 +116,6 @@ const concertsData = [
     "time": "3:00 PM",
     "location": "台北小巨蛋",
     "location-id":"Taipei",
-    "location-idtw":"台北",
     "aliases": ["yoasobi", "夜遊", "夜遊bi", "ヨアソビ", "YOA SOBI", "yoa sobi"],
     "image_url": YOASOBI,
     alt_dates: [
@@ -122,6 +126,7 @@ const concertsData = [
     "若違反規定，票券可能作廢且不退款。",
     "主辦單位不對票券轉讓所造成的損失負責。"
   ],
+  "price": "NT$ 2800 ~ NT$ 6800",
   },
   {
     "id": 7,
@@ -130,7 +135,6 @@ const concertsData = [
     "time": "6:30 PM",
     "location": "Legacy Taipei",
     "location-id":"Taipei",
-    "location-idtw":"台北",
     "aliases": ["chappell roan", "chapel roan", "chappel roan", "夏普羅安", "夏佩兒羅安"],
     "image_url": Chappell,
     alt_dates: [
@@ -141,6 +145,7 @@ const concertsData = [
     "若違反規定，票券可能作廢且不退款。",
     "主辦單位不對票券轉讓所造成的損失負責。"
   ],
+  "price": "NT$ 2800 ~ NT$ 6800",
   },
   {
     "id": 8,
@@ -158,6 +163,7 @@ const concertsData = [
     "若違反規定，票券可能作廢且不退款。",
     "主辦單位不對票券轉讓所造成的損失負責。"
   ],
+    "price": "NT$ 2800 ~ NT$ 6800",
   },
   {
     "id": 9,
@@ -167,7 +173,6 @@ const concertsData = [
     "location": "台北信義 Warehouse",
     "aliases": ["chappell roan", "chapel roan", "chappel roan", "夏普羅安", "夏佩兒羅安"],
     "location-id":"Taipei",
-    "location-idtw":"台北",
     "aliases": ["daft punk", "達夫龐克", "傻瓜龐克", "打夫龐克", "達夫朋克", "daftpunk"],
     "image_url": DaftPunk,
      alt_dates: [
@@ -178,6 +183,7 @@ const concertsData = [
     "若違反規定，票券可能作廢且不退款。",
     "主辦單位不對票券轉讓所造成的損失負責。"
   ],
+    "price": "NT$ 2800 ~ NT$ 6800",
   },
   {
     "id": 10,
@@ -186,7 +192,6 @@ const concertsData = [
     "time": "7:30 PM",
     "location": "台北大巨蛋",
     "location-id":"Taipei",
-    "location-idtw":"台北",
     "image_url": Lee,
     alt_dates: [
     { date: "2025-10-28", city: "台北大巨蛋" }
@@ -196,6 +201,7 @@ const concertsData = [
     "若違反規定，票券可能作廢且不退款。",
     "主辦單位不對票券轉讓所造成的損失負責。"
   ],
+    "price": "NT$ 2800 ~ NT$ 6800",
   }
 ]
-export default concertsData
+export default concerts
