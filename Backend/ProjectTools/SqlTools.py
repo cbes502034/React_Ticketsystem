@@ -129,15 +129,15 @@ class SqlTools(SqlBase):
 
 #RegisterModule
 #------------------------------------------------------------------------------------
-    def InsertRegisterData(self,loginID,password,name,gender,birthday,
-                           email,phone_number,mobile_number,address,secret):
+    def InsertRegisterData(self,loginID,IdType,loginType,password,name,gender,
+                           birthday,email,phone_number,mobile_number,address,secret):
         try:
-            INSTRUCTION = """INSERT INTO register(login_id,password,name,gender,birthday,
-                                                  email,phone_number,mobile_number,address,secret)
-                             VALUES(%s,%s,%s,%s,%s,
-                                    %s,%s,%s,%s,%s)"""
-            SET=(loginID,password,name,gender,birthday,
-                 email,phone_number,mobile_number,address,secret)
+            INSTRUCTION = """INSERT INTO register(login_id,IdType,loginType,password,name,gender,
+                                                  birthday,email,phone_number,mobile_number,address,secret)
+                             VALUES(%s,%s,%s,%s,%s,%s,
+                                    %s,%s,%s,%s,%s,%s)"""
+            SET=(self,loginID,IdType,loginType,password,name,gender,
+                 birthday,email,phone_number,mobile_number,address,secret)
             
             self.Execution(INSTRUCTION=INSTRUCTION,SET=SET)
             return {"status":True}
