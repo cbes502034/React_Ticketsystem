@@ -1,23 +1,25 @@
-from ..ProjectTools import TOTP
-async def ShowQRcode(tools,request):
-    response = await tools.GetRequestData(request=request)
-    if response["status"]:
-        data = response["data"]
-        email = data["email"]
-        secret = TOTP.GetSecret(request=request)
-        totpobject = TOTP.GetTOTPObject(secret=secret)
-        uri = TOTP.GetURI(totpobject=totpobject,email=email)
-        src = TOTP.getQRcodeSrc(uri=uri)
-        return {"status":True,"totpsrc":src}
-    else:
-        return {"status":False}
-    
-async def CheckANDRegister(tools,request):
-    response = await tools.GetRequestData(request=request)
+async def ShowQRcode(request,reqT,totpT):
+    response = await reqT.GetJson(request=request)
     if response["status"]:
         try:
             data = response["data"]
-            login_id = data["login_id"]
+            email = data["email"]
+            secret = totpT.GetSecret(request=request)
+            totpobject = totpT.GetTotpObject(secret=secret)
+            uri = totpT.GetUri(totpobject=totpobject,email=email)
+            src = totpT.GetQRcodeSrc(uri=uri)
+            return {"status":True,"totpsrc":src}
+        except Exception as e:
+            return {"status":False,
+                    "notify":f"ShowQRcodeError ! message : [{type(e)} {e}]"}
+    return {"status":False}
+    
+async def CheckANDRegister(request,reqT,sqlT,totpT):
+    response = await reqT.GetJson(request=request)
+    if response["status"]:
+        try:
+            data = response["data"]
+            loginID = data["login_id"]
             IdType = data["IdType"]
             loginType = data["loginType"]
             password = data["password"]
@@ -31,34 +33,16 @@ async def CheckANDRegister(tools,request):
             user_input = data["user_input"]
             
             secret = request.session["secret"]
-            totpobject = TOTP.GetTOTPObject(secret=secret)
+            totpobject = totpT.GetTotpObject(secret=secret)
+            
             if user_input==totpobject.now():
-                tools.Sql(instruction="""INSERT INTO register(login_id,
-                                                              IdType,
-                                                              loginType,
-                                                              password,
-                                                              name,
-                                                              gender,
-                                                              birthday,
-                                                              email,
-                                                              phone_number,
-                                                             mobile_number,
-                                                                   address,
-                                                                    secret)
-                                         VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
-                                     SET=(login_id,
-                                          IdType,
-                                          loginType,
-                                          password,
-                                          name,
-                                          gender,
-                                          birthday,
-                                          email,
-                                          phone_number,
-                                          mobile_number,
-                                          address,
-                                          secret))
+                InsertRegisterData_result = sqlT.InsertRegisterData(loginID,IdType,loginType,password,name,gender,
+                                                                    birthday,email,phone_number,mobile_number,address,secret)
+                if not InsertRegisterData_result["status"]:
+                    return InsertRegisterData_result
+    
                 del request.session["secret"]
+                
                 return {"status":True,
                         "notify":"註冊成功 !",
                         "secret":secret}
@@ -67,5 +51,6 @@ async def CheckANDRegister(tools,request):
                         "notify":"註冊失敗 !"}
  
         except Exception as e:
-            return {"status":False,"notify":f"註冊失敗 ! 錯誤訊息 : {type(e)} | {e}"}
+            return {"status":False,
+                    "notify":f"CheckANDRegisterError ! message : [{type(e)} | {e}]"}
     return response
