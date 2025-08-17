@@ -1,34 +1,25 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link} from 'react-router-dom'
 
-
-export default function Login() {
- const [login_id, setLoginId] = useState('')
+export default function Login({ setTab,setIsLoggedIn }) {
+  const [login_id, setLoginId] = useState('')
   const [password, setPassword] = useState('')
-  //const [captcha, setCaptcha] = useState('')
   const navigate = useNavigate()
 
- const handleSubmit = async (e) => {
-  e.preventDefault()
-
-  const body = {
-      login_id,
-      password,
-    }
-
-  const res = await fetch("/auth/login", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(body),
-    credentials: "include" 
-  })
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const res = await fetch("https://reactticketsystem-production.up.railway.app/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ login_id, password }),
+      credentials: "include"
+    })
 
   const data = await res.json()
-  if (data.status) {
-    alert(data.notify || "登入成功！")
-    navigate('/Home')   
+    if (data.status) {
+      alert(data.notify || "登入成功！")
+      setIsLoggedIn(true)       
+      window.location.href = '/'
   } else {
     alert(data.notify || "登入失敗")
   }
@@ -62,12 +53,12 @@ export default function Login() {
         </div>
 
         <div className="flex justify-between items-center text-sm text-gray-600 mt-2">
-          <a href="#" className="flex items-center gap-1 hover:text-gray-900">
+          <Link to="/Auth/ForgotPassword" className="flex items-center gap-1 hover:text-gray-900">
             ❓ 忘記密碼
-          </a>
-          <a href="#" className="flex items-center gap-1 hover:text-gray-900">
+          </Link>
+          <button type="button" onClick={() => setTab('register')} className="hover:text-red-600">
             ➕ 加入會員
-          </a>
+          </button>
         </div>
 
         <div className="flex justify-center gap-4 mt-6">

@@ -6,7 +6,7 @@ export default function NavTabs({ onTabChange }) {
 
   const handleTabClick = (key) => {
     setActiveTab(key)
-    onTabChange && onTabChange(key) // 通知父層切換畫面
+    onTabChange && onTabChange(key) 
   }
 
   return (
