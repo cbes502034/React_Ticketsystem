@@ -1,48 +1,43 @@
-async def Check(tools, request):
-    response = await tools.GetRequestData(request=request)
+async def Check(request,reqT,sqlT):
+    response = await reqT.GetJson(request=request)
+    
     if response["status"]:
         try:
             data = response["data"]
-            login_idInput = data["login_id"]
+            loginIDInput = data["login_id"]
             passwordInput = data["password"]
 
-            userData = tools.Sql(
-                instruction="""
-                    SELECT login_id, name, id 
-                    FROM register 
-                    WHERE login_id=%s AND password=%s
-                """,
-                SELECT=True,
-                SET=(login_idInput, passwordInput)
-            )
-
+            GetUserData_result = sqlT.GetUserData(loginIDInput=loginIDInput,passwordInput=passwordInput)
+            
+            if not GetUserData_result["status"]:
+                return GetUserData_result
+            
+            userData = GetUserData_result["userData"]
             if userData:
-                login_id, name, ID = userData[0]
-                request.session["UserID"] = login_id
+                
+                GetUserName_result = sqlT.GetUserName(loginIDInput=loginIDInput,passwordInput=passwordInput)
+                if not GetUserName_result["status"]:
+                    return GetUserName_result
+                userName = GetUserName_result["userName"]
 
-                request.session["UserName"] = name
-                request.session["RegisterID"] = ID
-                return {
-                    "status": True,
-                    "notify": "登入成功 !",
-                    "UserID": login_id,
-                    "UserName": name,
-                    "RegisterID": ID
-                }
+                GetUserID_result = sqlT.GetRegisterID(loginIDInput=loginIDInput,passwordInput=passwordInput)
+                if not GetUserID_result:
+                    return GetUserID_result
+                registerID = GetUserID_result["registerID"]
+
+                request.session["UserID"] = loginIDInput
+                request.session["UserName"] = userName
+                request.session["RegisterID"] = registerID
+                
+                return{"status":True,
+                       "notify":"登入成功 !",
+                       "UserID":loginIDInput,
+                       "UserName":userName,
+                       "RegisterID":registerID}
             else:
-                return {
-                    "status": False,
-                    "notify": "登入失敗！帳號或密碼錯誤"
-                }
-
+                return{"status":False,
+                       "notify":"登入失敗 !"}
         except Exception as e:
-            return {
-                "status": False,
-                "notify": f"登入失敗 ! 錯誤訊息 : {type(e)} | {e}"
-            }
-    else:
-        # tools.GetRequestData(request) 失敗
-        return {
-            "status": False,
-            "notify": "登入請求資料格式錯誤"
-        }
+            return {"status":False,
+                    "notify":f"CheckError ! message : [{type(e)} | {e}]"}
+    return response
